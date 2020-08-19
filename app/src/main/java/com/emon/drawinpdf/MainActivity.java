@@ -1,28 +1,15 @@
 package com.emon.drawinpdf;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,15 +19,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Bitmap bitmap;
-    private View page;
-    private ViewGroup view;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-         createPdf("Emon");
 
 
         LayoutInflater inflater = (LayoutInflater)
@@ -52,14 +34,15 @@ public class MainActivity extends AppCompatActivity {
 
          views.add(content);
 
-         PdfGenerator.Builder.getBuilder()
-                 .setContext(this)
-                 .setFolderName("1PDF")
-                 .setViewList(views)
+         PdfGenerator.getBuilder().setContext(this)
+                 .fromViewSource()
+                 .multipleViews()
+                 .fromViewList(views)
                  .setPageSize(PdfGenerator.PageSize.A4)
-                 .setStorageInfo(PdfGenerator.StorageInfo.INTERNAL_MEMORY)
-                 .setFileName("Emon")
-                 .setOpenPdfFile(true)
+                 .setTargetStorage(PdfGenerator.TargetStorage.INTERNAL_MEMORY)
+                 .setFileName("TestPDF")
+                 .setFolderName("Test PDF folder")
+                 .openPDFafterGeneration(true)
                  .build();
 
 
