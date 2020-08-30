@@ -1,4 +1,4 @@
-package com.gkemon.XMLtoPdf;
+package com.gkemon.XMLtoPDF;
 
 import org.junit.Test;
 

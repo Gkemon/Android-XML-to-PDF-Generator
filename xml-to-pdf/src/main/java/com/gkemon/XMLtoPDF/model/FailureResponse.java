@@ -1,4 +1,4 @@
-package com.gkemon.XMLtoPdf.model;
+package com.gkemon.XMLtoPDF.model;
 
 /**
  * Created by Gk Emon on 8/30/2020.

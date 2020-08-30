@@ -1,4 +1,4 @@
-package com.gkemon.XMLtoPdf;
+package com.gkemon.XMLtoPDF;
 
 import android.Manifest;
 import android.app.Activity;
@@ -17,8 +17,8 @@ import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.core.content.ContextCompat;
 
-import com.gkemon.XMLtoPdf.model.FailureResponse;
-import com.gkemon.XMLtoPdf.model.SuccessResponse;
+import com.gkemon.XMLtoPDF.model.FailureResponse;
+import com.gkemon.XMLtoPDF.model.SuccessResponse;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;

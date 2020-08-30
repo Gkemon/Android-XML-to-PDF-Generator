@@ -1,4 +1,4 @@
-package com.gkemon.XMLtoPdf.model;
+package com.gkemon.XMLtoPDF.model;
 
 import android.graphics.pdf.PdfDocument;
 import android.text.TextUtils;

@@ -1,4 +1,4 @@
-package com.gkemon.XMLtoPdf;
+package com.gkemon.XMLtoPDF;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.gkemon.XMLtoPdf.test", appContext.getPackageName());
+        assertEquals("com.gkemon.XMLtoPDF.test", appContext.getPackageName());
     }
 }

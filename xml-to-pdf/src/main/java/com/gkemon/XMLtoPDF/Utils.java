@@ -1,4 +1,4 @@
-package com.gkemon.XMLtoPdf;
+package com.gkemon.XMLtoPDF;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.view.View;
 
 import androidx.annotation.IdRes;
 
-import com.gkemon.XMLtoPdf.model.FailureResponse;
+import com.gkemon.XMLtoPDF.model.FailureResponse;
 
 import java.util.ArrayList;
 import java.util.List;

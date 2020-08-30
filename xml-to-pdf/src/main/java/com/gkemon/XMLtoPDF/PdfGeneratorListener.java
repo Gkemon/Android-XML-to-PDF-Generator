@@ -1,7 +1,7 @@
-package com.gkemon.XMLtoPdf;
+package com.gkemon.XMLtoPDF;
 
-import com.gkemon.XMLtoPdf.model.FailureResponse;
-import com.gkemon.XMLtoPdf.model.SuccessResponse;
+import com.gkemon.XMLtoPDF.model.FailureResponse;
+import com.gkemon.XMLtoPDF.model.SuccessResponse;
 
 interface PdfGeneratorContract {
     void onSuccess(SuccessResponse response);
