@@ -33,7 +33,7 @@
 
 * [➤ Installation](#-installation)
 * [➤ Getting Started](#-getting-started)
-* [➤ License](#-license-1)
+* [➤ License](#-license)
 </details>
 
 
@@ -193,7 +193,7 @@ PdfGenerator.getBuilder()
 
 #### Logo credit: [kirillmazin](https://www.behance.net/kirillmazin)
 
-### License
+## ➤ License
 
 The source code is licensed under the [Apache License 2.0](https://github.com/Gkemon/XML-to-PDF-generator/blob/master/LICENSE). 
 
