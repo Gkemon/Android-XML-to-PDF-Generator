@@ -9,7 +9,7 @@
 
 <p align="center">
   <b>Automatically generate PDF file from XML file or Java's View object in Android</b></br>
-  <sub>Make PDF from Android layout resourses (e.g - R.layout.myLayout), Java's view ids or directly views objects <sub>
+  <p>Make PDF from Android layout resourses (e.g - R.layout.myLayout), Java's view ids or directly views objects <p>
 </p>
 
 <br />
@@ -41,10 +41,22 @@
 
 ## ➤ Installation
 
-```javascript
-npm install @appnest/readme -D
+**Step 1**. Add the JitPack repository to your root ```build.gradle``` at the end of repositories
+```
+allprojects {
+    repositories {
+        // ...
+        maven { url 'https://jitpack.io' }
+    }
+}
 ```
 
+**Step 2**. Add the dependency
+```
+dependencies {
+        implementation 'com.github.Gkemon:XML-to-PDF-generator:1.0'
+}
+```	
 If you don't want to install anything you can use the `npx @appnest/readme generate` command instead.
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#getting-started-quick)
