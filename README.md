@@ -1,7 +1,7 @@
 <!-- ⚠️ This README has been generated from the file(s) "blueprint.md" link - https://github.com/andreasbm/readme ⚠️--><p align="center">
   <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/a685e7437236.5600962f5b4c4.jpg" alt="Logo" width="150" height="150"  />
 </p>
-<h1 align="center">XML to PDF</h1>
+<h1 align="center">XML to PDF Generator For Android</h1>
  <p align="center">
 		<a href="https://github.com/Gkemon/XML-to-PDF-generator"><img alt="Maintained" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" height="20"/></a>
 	<a href="https://github.com/Gkemon/XML-to-PDF-generator"><img alt="Maintained" src="https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg" height="20"/></a>
