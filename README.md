@@ -3,12 +3,13 @@
 </p>
 <h1 align="center">XML to PDF</h1>
  <p align="center">
-		<a href="https://github.com/andreasbm/readme/graphs/commit-activity"><img alt="Maintained" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" height="20"/></a>
+		<a href="https://github.com/Gkemon/XML-to-PDF-generator"><img alt="Maintained" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" height="20"/></a>
+	<a href="https://github.com/Gkemon/XML-to-PDF-generator"><img alt="Maintained" src="https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg" height="20"/></a>
 	</p>
 
 <p align="center">
   <b>Automatically generate PDF file from XML file or Java's View object in Android</b></br>
-  <sub>Make PDF from Android layout resourses (e.g - R.layour.myLayout), Java's view ids or directly views objects <sub>
+  <sub>Make PDF from Android layout resourses (e.g - R.layout.myLayout), Java's view ids or directly views objects <sub>
 </p>
 
 <br />
