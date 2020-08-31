@@ -182,7 +182,16 @@ PdfGenerator.getBuilder()
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#templates)
 
+<p>
+  <a href="https://www.linkedin.com/in/md-golam-kibria-emon-0301b7104/" rel="nofollow noreferrer">
+    <img src="https://i.stack.imgur.com/gVE0j.png" alt="linkedin"> LinkedIn
+  </a> &nbsp; 
+  <a href="emon.info2013@gmail.com">
+   <img width="20" src="https://user-images.githubusercontent.com/5141132/50740364-7ea80880-1217-11e9-8faf-2348e31beedd.png" alt="inbox"> Inbox
+  </a>
+</p>
 
+#### Logo credit: [kirillmazin](https://www.behance.net/kirillmazin)
 
 ### License
 
