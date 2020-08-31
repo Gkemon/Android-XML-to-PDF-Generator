@@ -9,7 +9,7 @@
 
 <p align="center">
   <b>Automatically generate PDF file from XML file or Java's View object in Android</b></br>
-  <p align="center"> Make PDF from Android layout resourses (e.g - ```R.layout.myLayout```,```R.id.viewID```), Java's view ids or directly views objects <p>
+  <p align="center"> Make PDF from Android layout resourses (e.g - R.layout.myLayout,R.id.viewID), Java's view ids or directly views objects <p>
 </p>
 
 <br />
@@ -63,7 +63,7 @@ dependencies {
 
 ## ➤ Getting Started
 
-You can generate PDF from many sources.
+You can generate <b>PDF</b> from many sources.
 * Layout resources (i.e: ```R.layout.myLayout```)
 * View ids (i.e: ```R.id.viewID```)
 * Java view objects (i.e ```View```,```TextView```,```LinearLayout```)
