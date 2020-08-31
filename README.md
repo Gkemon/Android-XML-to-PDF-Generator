@@ -70,16 +70,16 @@ You can generate PDF from many sources.
 
 
 
-###From layout resources:
+### From layout resources :
 
 
 ```java
  PdfGenerator.getBuilder()
-                        .setContext(MainActivity.this)
+                        .setContext(context)
                         .fromLayoutXMLSource()
                         .fromLayoutXML(R.layout.layout_print,R.layout.layout_print)
 			/* "fromLayoutXML()" takes array of layout resources.
-			 * You can also invoke "fromLayoutXMLList()" method here which takes List of layout resources instead of array. */
+			 * You can also invoke "fromLayoutXMLList()" method here which takes list of layout resources instead of array. */
                         .setDefaultPageSize(PdfGenerator.PageSize.A4)
 			/* It takes default page size like A4,A5. You can also set custom page size in pixel
 			 * by calling ".setCustomPageSize(int widthInPX, int heightInPX)" here. */
@@ -115,69 +115,74 @@ You can generate PDF from many sources.
                         });
 ```
 
-### Configuration
+### From view IDs :
 
-To configure this library you'll need to create a `blueprint.json` file. This file is the configuration for the templates we are going to take a look at in the next section. If you want to interpolate values from the configuration file into your README file you can simply reference them without a scope. Eg. if you have the field "link" in your `blueprint.json` you can write `{{ link }}` to reference it.
+```java
+    PdfGenerator.getBuilder()
+                        .setContext(context)
+                        .fromViewIDSource()
+                        .fromViewID(activity,R.id.tv_print_area,R.id.tv_print_area)
+			/* "fromViewID()" takes array of view ids those MUST BE and MUST BE contained in the inserted "activity" .
+			 * You can also invoke "fromViewIDList()" method here which takes list of view ids instead of array. */
+                        .setCustomPageSize(3000,3000)
+			/* Here I used ".setCustomPageSize(3000,3000)" to set custom page size.*/
+                        .setFileName("Test-PDF")
+                        .setFolderName("Test-PDF-folder")
+                        .openPDFafterGeneration(true)
+                        .build(new PdfGeneratorListener() {
+                            @Override
+                            public void onFailure(FailureResponse failureResponse) {
+                                super.onFailure(failureResponse);
+                            }
 
-Great. Now that we have the basics covered, let's continue and see how you can use templates!
+                            @Override
+                            public void showLog(String log) {
+                                super.showLog(log);
+                            }
+
+                            @Override
+                            public void onSuccess(SuccessResponse response) {
+                                super.onSuccess(response);
+                            }
+                        });
+```
+
+### From views:
+
+```java 
+
+PdfGenerator.getBuilder()
+                        .setContext(MainActivity.this)
+                        .fromViewSource()
+                        .fromView(view) 
+			/* "fromView()" takes array of view. You can also invoke "fromViewList()" method here
+			 * which takes list of view instead of array. */
+                        .setCustomPageSize(3000,3000)
+                        .setFileName("Test-PDF")
+                        .setFolderName("Test-PDF-folder")
+                        .openPDFafterGeneration(true)
+                        .build(new PdfGeneratorListener() {
+                            @Override
+                            public void onFailure(FailureResponse failureResponse) {
+                                super.onFailure(failureResponse);
+                            }
+
+                            @Override
+                            public void showLog(String log) {
+                                super.showLog(log);
+                            }
+
+                            @Override
+                            public void onSuccess(SuccessResponse response) {
+                                super.onSuccess(response);
+                            }
+                        });
+```			
+			
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#templates)
 
 
-### Logo
-
-The logo template adds a logo to your readme and looks like this:
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/logo-shadow.png" alt="Logo" width="150" height="150" />
-</p>
-
-Use the placeholder `{{ template:logo }}` to stamp it. You will need to add the `logo` field to your `blueprint.json`. The logo field requires an `src` field. Optionally you can provide values for `width`, `height` and `alt`. Below is an example on how to add the data for the logo template.
-
-```json
-{
-  "logo": {
-    "src": "https://raw.githubusercontent.com/andreasbm/readme/master/assets/logo-shadow.png",
-    "width": "150"
-  }
-}
-```
-
-
-
-## ➤ Contributors
-	
-
-| [<img alt="Andreas Mehlsen" src="https://avatars1.githubusercontent.com/u/6267397?s=460&v=4" width="100">](https://twitter.com/andreasmehlsen) | [<img alt="You?" src="https://joeschmoe.io/api/v1/random" width="100">](https://github.com/andreasbm/readme/blob/master/CONTRIBUTING.md) |
-|:--------------------------------------------------:|:--------------------------------------------------:|
-| [Andreas Mehlsen](https://twitter.com/andreasmehlsen) | [You?](https://github.com/andreasbm/readme/blob/master/CONTRIBUTING.md) |
-| 🔥                                               |                                                  |
-
-
-Use the `{{ template:contributors }}` placeholder to stamp it. Let's sa To use this template your are required to add the `contributors` array to your `package.json` file like this. Only the `name` field is required.
-
-```json
-{
-  "contributors": [
-    {
-      "name": "Andreas Mehlsen",
-      "email": "hello@example.com",
-      "url": "https://twitter.com/andreasmehlsen",
-      "img": "https://avatars1.githubusercontent.com/u/6267397?s=460&v=4",
-      "info": [
-        "🔥"
-      ]
-    },
-    {
-      "name": "You?",
-      "img": "https://joeschmoe.io/api/v1/random",
-      "url": "https://github.com/andreasbm/readme/blob/master/CONTRIBUTING.md"
-    }
-  ]
-}
-```
-
-Take note of the `info` array. That one is really exciting! Here you can add lines describing the contributors - for example the role of accomplishments. Take a look [here](https://allcontributors.org/docs/en/emoji-key) for more inspiration of what you could put into the info array.
 
 ### License
 
