@@ -1,2 +1,3 @@
-include ':sample', ':xml-to-pdf'
+include ':sample',
+        ':xml-to-pdf'
 rootProject.name='DrawInPDF'

@@ -25,6 +25,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.itextpdf:itextpdf:5.0.6'
+    /*Comment out the line below if you want to use library from jitpack repo*/
+    //implementation 'com.github.Gkemon:XML-to-PDF-generator:1.0'
+
+    /*Comment out the line below if you want to use library locally*/
     implementation project(path: ':xml-to-pdf')
 }
