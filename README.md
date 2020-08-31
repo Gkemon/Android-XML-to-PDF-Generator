@@ -9,7 +9,7 @@
 
 <p align="center">
   <b>Automatically generate PDF file from XML file or Java's View object in Android</b></br>
-  <p align="center"> Make PDF from Android layout resourses (e.g - R.layout.myLayout,R.id.viewID), Java's view ids or directly views objects <p>
+  <p align="center"> Make PDF from Android layout resources (e.g - R.layout.myLayout,R.id.viewID), Java's view ids or directly views objects <p>
 </p>
 
 <br />
