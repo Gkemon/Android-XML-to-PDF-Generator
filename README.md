@@ -186,7 +186,7 @@ PdfGenerator.getBuilder()
 
 ### License
 
-The license template adds a license section and looks like this:
+The source code is licensed under the [Apache License 2.0](https://github.com/Gkemon/XML-to-PDF-generator/blob/master/LICENSE). 
 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#license)
