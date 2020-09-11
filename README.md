@@ -183,7 +183,7 @@ PdfGenerator.getBuilder()
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#templates)
 
 <p>
-  <a href="https://www.linkedin.com/in/md-golam-kibria-emon-0301b7104/" rel="nofollow noreferrer">
+  <a href="https://www.linkedin.com/in/gk-mohammad-emon-0301b7104" rel="nofollow noreferrer">
     <img src="https://i.stack.imgur.com/gVE0j.png" alt="linkedin"> LinkedIn
   </a> &nbsp; 
   <a href="emon.info2013@gmail.com">
