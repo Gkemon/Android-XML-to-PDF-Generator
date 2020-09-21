@@ -7,7 +7,6 @@
 	<a href="https://github.com/Gkemon/XML-to-PDF-generator"><img alt="Maintained" src="https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg" height="20"/></a>
 	</p>
 	 <p align="center">
-	<a href="https://github.com/Gkemon/XML-to-PDF-generator"><img alt="Maintained" src="https://img.shields.io/badge/Android%20Arsenal-Android--XML--to--PDF--Generator-green.svg?style=flat" height="20"/></a>
 	</p>
 <a href="https://github.com/Gkemon/XML-to-PDF-generator"><img alt="Maintained" src="https://img.shields.io/badge/Android%20Arsenal-Android--XML--to--PDF--Generator-green.svg?style=flat" height="20"/></a>
 </p>
