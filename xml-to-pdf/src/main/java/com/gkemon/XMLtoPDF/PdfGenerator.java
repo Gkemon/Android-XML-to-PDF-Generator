@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.IdRes;
@@ -21,9 +22,11 @@ import com.gkemon.XMLtoPDF.model.FailureResponse;
 import com.gkemon.XMLtoPDF.model.SuccessResponse;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.File;
@@ -216,7 +219,7 @@ public class PdfGenerator {
                     StrictMode.setVmPolicy(builder.build());
 
                     if (Environment.getExternalStorageDirectory() != null &&
-                            !TextUtils.isEmpty(Environment.getExternalStorageDirectory().getPath())) {
+                             !TextUtils.isEmpty(Environment.getExternalStorageDirectory().getPath())) {
                         directory_path = Environment.getExternalStorageDirectory().getPath();
                     } else if (context.getExternalFilesDir(null) != null &&
                             !TextUtils.isEmpty(context.getExternalFilesDir(null).getAbsolutePath())) {
@@ -276,6 +279,9 @@ public class PdfGenerator {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 print();
             } else {
+                postLog("WRITE_EXTERNAL_STORAGE Permission is not given." +
+                        " Permission taking popup (using https://github.com/Karumi/Dexter) is going " +
+                        "to be shown");
                 Dexter.withContext(context)
                         .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         .withListener(new PermissionListener() {
@@ -286,13 +292,19 @@ public class PdfGenerator {
 
                             @Override
                             public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-
+                                postLog("WRITE_EXTERNAL_STORAGE Permission is denied by user.");
                             }
 
                             @Override
                             public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest,
                                                                            PermissionToken permissionToken) {
-
+                            }
+                        })
+                        .withErrorListener(new PermissionRequestErrorListener() {
+                            @Override
+                            public void onError(DexterError error) {
+                                postLog("Error from Dexter (https://github.com/Karumi/Dexter) : " +
+                                        error.toString());
                             }
                         }).check();
             }
