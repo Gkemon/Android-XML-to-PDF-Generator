@@ -6,6 +6,11 @@
 		<a href="https://github.com/Gkemon/XML-to-PDF-generator"><img alt="Maintained" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" height="20"/></a>
 	<a href="https://github.com/Gkemon/XML-to-PDF-generator"><img alt="Maintained" src="https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg" height="20"/></a>
 	</p>
+	 <p align="center">
+	<a href="https://android-arsenal.com/details/1/8165"><img alt="Maintained" src="https://img.shields.io/badge/Android%20Arsenal-Android--XML--to--PDF--Generator-green.svg?style=flat" height="20"/></a>
+	</p>
+
+</p>
 
 <p align="center">
   <b>Automatically generate PDF file from XML file or Java's View object in Android</b></br>
@@ -183,7 +188,7 @@ PdfGenerator.getBuilder()
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#templates)
 
 <p>
-  <a href="https://www.linkedin.com/in/md-golam-kibria-emon-0301b7104/" rel="nofollow noreferrer">
+  <a href="https://www.linkedin.com/in/gk-mohammad-emon-0301b7104" rel="nofollow noreferrer">
     <img src="https://i.stack.imgur.com/gVE0j.png" alt="linkedin"> LinkedIn
   </a> &nbsp; 
   <a href="emon.info2013@gmail.com">
