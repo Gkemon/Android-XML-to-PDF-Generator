@@ -31,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
 
                 LayoutInflater inflater = (LayoutInflater)
                         getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View content = inflater.inflate(R.layout.layout_main_page, null);
+                View content = inflater.inflate(R.layout.layout_print, null);
 
                 List<View> views =new ArrayList<>();
                 views.add(content);
 
-                List<Integer> integers = new ArrayList<>(Arrays.asList(R.layout.layout_main_page,R.layout.layout_main_page));
+                List<Integer> integers = new ArrayList<>(Arrays.asList(R.layout.layout_print,R.layout.layout_print));
 
                 PdfGenerator.getBuilder()
                         .setContext(MainActivity.this)
