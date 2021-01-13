@@ -183,7 +183,22 @@ PdfGenerator.getBuilder()
                             }
                         });
 ```			
-			
+### Creation multi-paged PDF:
+Users of the library, sometimes have doubts that how to create multi-paged PDF. Though I mentioned it above but I need to show it again for more clearance.
+
+You can insert multiple xml or views object even view id in the parameter of the following methods to create multi-paged pdf: 
+
+If you want create multi-paged pdf from xml-
+`.fromLayoutXML(R.layout.layout_1,R.layout.layout_2)`
+
+ If you want create multi-paged pdf from view ids -
+`.fromViewID(activity,R.id.viewId1,R.id.viewId2)`
+
+ If you want create multi-paged pdf from views-
+`.fromViewID(view1,view1)`
+
+So if you find any trouble,then you are also welcomed again to knock me.Thank you so much. 
+		
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#templates)
 
