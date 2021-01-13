@@ -190,10 +190,15 @@ You can insert multiple xml or views object even view id in the parameter of the
 
 
 If you want create multi-paged pdf from xmls-
+
 `.fromLayoutXML(R.layout.layout_1,R.layout.layout_2)`
+
  If you want create multi-paged pdf from view ids -
+ 
 `.fromViewID(activity,R.id.viewId1,R.id.viewId2)`
+
  If you want create multi-paged pdf from views-
+ 
 `.fromViewID(view1,view1)`
 
 
