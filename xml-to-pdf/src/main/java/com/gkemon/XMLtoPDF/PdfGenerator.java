@@ -11,8 +11,8 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
+import android.widget.ScrollView;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
@@ -118,8 +118,8 @@ public class PdfGenerator {
             , FromSourceStep, ContextStep {
 
         private static int NO_XML_SELECTED_YET = -1;
-        private int pageWidthInPixel;
-        private int pageHeightInPixel;
+        private int pageWidthInPixel = a4WidthInPX;
+        private int pageHeightInPixel = a4HeightInPX;
         private Context context;
         private PageSize pageSize;
         private PdfGeneratorListener pdfGeneratorListener;
@@ -186,6 +186,8 @@ public class PdfGenerator {
                             pageHeightInPixel = a5HeightInPX;
                             pageWidthInPixel = a5WidthInPX;
                         }
+                    } else {
+                        postLog("Page size is not found");
                     }
 
 
@@ -193,21 +195,25 @@ public class PdfGenerator {
                         postLog("View list null or zero sized");
                     for (int i = 0; i < viewList.size(); i++) {
 
+                        /*https://stackoverflow.com/questions/5536066/convert-view-to-bitmap-on-android
+                        https://stackoverflow.com/questions/41356494/how-to-get-bitmap-of-a-view
+                        https://stackoverflow.com/questions/44583285/scrollview-to-pdf-and-pdf-to-print-option-in-android-studio*/
+                        View content = viewList.get(i);
+                        if (content instanceof ScrollView) {
+                            content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                        } else content.measure(View.MeasureSpec.EXACTLY, View.MeasureSpec.EXACTLY);
+
+                        pageHeightInPixel = content.getMeasuredHeight();
+                        pageWidthInPixel = content.getMeasuredWidth();
+
+                        //https://stackoverflow.com/a/45529971/7200133
                         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidthInPixel,
                                 pageHeightInPixel, i + 1).create();
                         PdfDocument.Page page = document.startPage(pageInfo);
 
 
-                        View content = viewList.get(i);
-
                         content.measure(pageWidthInPixel, pageHeightInPixel);
                         content.layout(0, 0, pageWidthInPixel, pageHeightInPixel);
-
-                        int measureWidth = View.MeasureSpec.makeMeasureSpec(page.getCanvas().getWidth(), View.MeasureSpec.EXACTLY);
-                        int measuredHeight = View.MeasureSpec.makeMeasureSpec(page.getCanvas().getHeight(), View.MeasureSpec.EXACTLY);
-
-                        content.measure(measureWidth, measuredHeight);
-                        content.layout(0, 0, page.getCanvas().getWidth(), page.getCanvas().getHeight());
                         content.draw(page.getCanvas());
 
                         document.finishPage(page);
