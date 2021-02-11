@@ -160,7 +160,6 @@ public class PdfGenerator {
                 Uri uri = Uri.fromFile(file);
                 intent.setDataAndType(uri, "*/*");
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
                 try {
                     context.startActivity(intent);
                 } catch (ActivityNotFoundException e) {
@@ -187,7 +186,8 @@ public class PdfGenerator {
                             pageWidthInPixel = a5WidthInPX;
                         }
                     } else {
-                        postLog("Page size is not found");
+                        postLog("Default page size is not found. Your custom page width is " +
+                                pageWidthInPixel+" and custom page height is "+pageHeightInPixel);
                     }
 
 
@@ -195,24 +195,39 @@ public class PdfGenerator {
                         postLog("View list null or zero sized");
                     for (int i = 0; i < viewList.size(); i++) {
 
+                        //https://stackoverflow.com/a/45529971/7200133
                         /*https://stackoverflow.com/questions/5536066/convert-view-to-bitmap-on-android
                         https://stackoverflow.com/questions/41356494/how-to-get-bitmap-of-a-view
                         https://stackoverflow.com/questions/44583285/scrollview-to-pdf-and-pdf-to-print-option-in-android-studio*/
+
                         View content = viewList.get(i);
+
+                        /*These thresholds are for pixel to postScript unit*/
+                        double thresholdInWidth = 0.75;
+                        double thresholdInHeight = 0.75;
+
                         if (content instanceof ScrollView) {
-                            content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                            content.measure(View.MeasureSpec.makeMeasureSpec(pageWidthInPixel, View.MeasureSpec.EXACTLY), View.MeasureSpec.UNSPECIFIED);
+                                /*For ignore the height size if it is a scrollview and view size is
+                                  more then default A4 size page.*/
+                            if (content.getMeasuredHeight() >= a4HeightInPX) {
+                                pageHeightInPixel = content.getMeasuredHeight();
+                                thresholdInHeight = 1.00;
+                            } else {
+                                // Otherwise standard A4 page height will be ignored.
+                                pageHeightInPixel = a4HeightInPX;
+                            }
                         } else content.measure(View.MeasureSpec.EXACTLY, View.MeasureSpec.EXACTLY);
 
-                        pageHeightInPixel = content.getMeasuredHeight();
-                        pageWidthInPixel = content.getMeasuredWidth();
-
-                        //https://stackoverflow.com/a/45529971/7200133
-                        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(pageWidthInPixel,
-                                pageHeightInPixel, i + 1).create();
+                        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder((int) (pageWidthInPixel * thresholdInWidth),
+                                (int) (pageHeightInPixel * thresholdInHeight), i + 1).create();
                         PdfDocument.Page page = document.startPage(pageInfo);
 
+                        pageHeightInPixel = page.getCanvas().getHeight();
+                        pageWidthInPixel = page.getCanvas().getWidth();
 
-                        content.measure(pageWidthInPixel, pageHeightInPixel);
+                        content.measure(View.MeasureSpec.makeMeasureSpec(pageWidthInPixel, View.MeasureSpec.EXACTLY),
+                                View.MeasureSpec.makeMeasureSpec(pageHeightInPixel, View.MeasureSpec.EXACTLY));
                         content.layout(0, 0, pageWidthInPixel, pageHeightInPixel);
                         content.draw(page.getCanvas());
 
