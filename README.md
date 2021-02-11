@@ -1,5 +1,5 @@
 <!-- ⚠️ This README has been generated from the file(s) "blueprint.md" link - https://github.com/andreasbm/readme ⚠️--><p align="center">
-  <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/a685e7437236.5600962f5b4c4.jpg" alt="Logo" width="150" height="150"  />
+  <img src="https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/master/logo.png" alt="Logo" width="150" height="150"  />
 </p>
 <h1 align="center">XML to PDF Generator For Android</h1>
  <p align="center">
@@ -182,8 +182,28 @@ PdfGenerator.getBuilder()
                                 super.onSuccess(response);
                             }
                         });
-```			
-			
+```	
+
+### Multi-paged PDF creation:
+Users of the library, sometimes have doubts that how to create multi-paged PDF. Though I mentioned it above but I need to show it again for more clearance.
+You can insert multiple xml or views object even view id in the parameter of the following methods to create multi-paged pdf: 
+
+
+If you want create multi-paged pdf from xmls-
+
+`.fromLayoutXML(R.layout.layout_1,R.layout.layout_2)`
+
+ If you want create multi-paged pdf from view ids -
+ 
+`.fromViewID(activity,R.id.viewId1,R.id.viewId2)`
+
+ If you want create multi-paged pdf from views-
+ 
+`.fromViewID(view1,view1)`
+
+
+So if you find any trouble,then you are also welcomed again to knock me.Thank you so much. 
+		
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#templates)
 
