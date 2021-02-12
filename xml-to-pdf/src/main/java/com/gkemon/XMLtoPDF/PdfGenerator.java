@@ -14,7 +14,6 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ScrollView;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
@@ -230,14 +229,10 @@ public class PdfGenerator {
                         pageHeightInPixel = (int) (pageHeightInPixel * postScriptThreshold);
                         pageWidthInPixel = (int) (pageWidthInPixel * postScriptThreshold);
 
-                        if (content instanceof ScrollView) {
-                            content.measure(View.MeasureSpec.makeMeasureSpec(pageWidthInPixel, View.MeasureSpec.EXACTLY), View.MeasureSpec.UNSPECIFIED);
-                            pageHeightInPixel = (int) (Math.max(content.getMeasuredHeight(), a4HeightInPostScript));
-                        } else {
-                            content.measure(
-                                    View.MeasureSpec.makeMeasureSpec(pageWidthInPixel, View.MeasureSpec.EXACTLY),
-                                    View.MeasureSpec.makeMeasureSpec(pageHeightInPixel, View.MeasureSpec.EXACTLY));
-                        }
+                        
+                        content.measure(View.MeasureSpec.makeMeasureSpec(pageWidthInPixel, View.MeasureSpec.EXACTLY), View.MeasureSpec.UNSPECIFIED);
+                        pageHeightInPixel = (int) (Math.max(content.getMeasuredHeight(), a4HeightInPostScript));
+
 
                         PdfDocument.PageInfo pageInfo =
                                 new PdfDocument.PageInfo.Builder((pageWidthInPixel), (pageHeightInPixel), i + 1).create();
