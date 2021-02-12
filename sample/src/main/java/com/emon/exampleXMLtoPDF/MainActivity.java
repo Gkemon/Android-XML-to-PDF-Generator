@@ -13,10 +13,6 @@ import com.gkemon.XMLtoPDF.PdfGeneratorListener;
 import com.gkemon.XMLtoPDF.model.FailureResponse;
 import com.gkemon.XMLtoPDF.model.SuccessResponse;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
     Button btnPrint;
     @Override
@@ -33,15 +29,10 @@ public class MainActivity extends AppCompatActivity {
                         getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View content = inflater.inflate(R.layout.layout_print, null);
 
-                List<View> views =new ArrayList<>();
-                views.add(content);
-
-                List<Integer> integers = new ArrayList<>(Arrays.asList(R.layout.layout_print,R.layout.layout_print));
-
                 PdfGenerator.getBuilder()
                         .setContext(MainActivity.this)
-                        .fromViewIDSource()
-                        .fromViewID(MainActivity.this,R.id.tv_print_area,R.id.tv_print_area)
+                        .fromViewSource()
+                        .fromView(content)
                         .setDefaultPageSize(PdfGenerator.PageSize.A4)
                         .setFileName("TestPDF")
                         .setFolderName("Test-PDF-folder")

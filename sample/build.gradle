@@ -28,6 +28,9 @@ dependencies {
     /*Comment out the line below if you want to use library from jitpack repo*/
     //implementation 'com.github.Gkemon:XML-to-PDF-generator:1.0'
 
+    implementation 'com.intuit.ssp:ssp-android:1.0.5'
+    implementation 'com.intuit.sdp:sdp-android:1.0.5'
+
     /*Comment out the line below if you want to use library locally*/
     implementation project(path: ':xml-to-pdf')
 }

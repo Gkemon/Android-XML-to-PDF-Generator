@@ -6,6 +6,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Environment;
@@ -38,17 +40,23 @@ import java.util.List;
 
 public class PdfGenerator {
 
+    public static double postScriptThreshold = 0.75;
     public static int a4HeightInPX = 3508;
     public static int a4WidthInPX = 2480;
     public static int a5HeightInPX = 1748;
     public static int a5WidthInPX = 2480;
+
+    public static int a4HeightInPostScript = (int) (a4HeightInPX * postScriptThreshold);
+    public static int a4WidthInPostScript = (int) (a4WidthInPX * postScriptThreshold);
+
+    public static int WRAP_CONTENT_WIDTH = 0, WRAP_CONTENT_HEIGHT = 0;
 
     public static ContextStep getBuilder() {
         return new Builder();
     }
 
     public enum PageSize {
-        A4, A5
+        A4, A5, WRAP_CONTENT
     }
 
 
@@ -171,6 +179,13 @@ public class PdfGenerator {
             }
         }
 
+        public static Bitmap loadBitmapFromView(View v, int width, int height) {
+            Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(b);
+            v.draw(c);
+            return b;
+        }
+
         private void print() {
 
             try {
@@ -184,6 +199,9 @@ public class PdfGenerator {
                         } else if (pageSize == PageSize.A5) {
                             pageHeightInPixel = a5HeightInPX;
                             pageWidthInPixel = a5WidthInPX;
+                        } else if (pageSize == PageSize.WRAP_CONTENT) {
+                            pageWidthInPixel = WRAP_CONTENT_WIDTH;
+                            pageHeightInPixel = WRAP_CONTENT_HEIGHT;
                         }
                     } else {
                         postLog("Default page size is not found. Your custom page width is " +
@@ -194,40 +212,37 @@ public class PdfGenerator {
                     if (viewList == null || viewList.size() == 0)
                         postLog("View list null or zero sized");
                     for (int i = 0; i < viewList.size(); i++) {
-
-                        //https://stackoverflow.com/a/45529971/7200133
-                        /*https://stackoverflow.com/questions/5536066/convert-view-to-bitmap-on-android
-                        https://stackoverflow.com/questions/41356494/how-to-get-bitmap-of-a-view
-                        https://stackoverflow.com/questions/44583285/scrollview-to-pdf-and-pdf-to-print-option-in-android-studio*/
-
                         View content = viewList.get(i);
 
-                        /*These thresholds are for pixel to postScript unit*/
-                        double thresholdInWidth = 0.75;
-                        double thresholdInHeight = 0.75;
+                        if (pageWidthInPixel == WRAP_CONTENT_HEIGHT && pageHeightInPixel == WRAP_CONTENT_WIDTH) {
+                            content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                            pageHeightInPixel = content.getMeasuredHeight();
+                            pageWidthInPixel = content.getMeasuredWidth();
+                        } else {
+                            /*If page size is less then standard A4 size then assign it A4 size otherwise
+                            the view will be messed up or so minimized that it will be not print in pdf*/
+                            pageWidthInPixel = Math.max(pageWidthInPixel, a4WidthInPX);
+                            pageHeightInPixel = Math.max(pageWidthInPixel, a4HeightInPX);
+                        }
+
+                        /*Convert page size from pixel into post script because PdfDocument takes
+                         * post script as a size unit*/
+                        pageHeightInPixel = (int) (pageHeightInPixel * postScriptThreshold);
+                        pageWidthInPixel = (int) (pageWidthInPixel * postScriptThreshold);
 
                         if (content instanceof ScrollView) {
                             content.measure(View.MeasureSpec.makeMeasureSpec(pageWidthInPixel, View.MeasureSpec.EXACTLY), View.MeasureSpec.UNSPECIFIED);
-                                /*For ignore the height size if it is a scrollview and view size is
-                                  more then default A4 size page.*/
-                            if (content.getMeasuredHeight() >= a4HeightInPX) {
-                                pageHeightInPixel = content.getMeasuredHeight();
-                                thresholdInHeight = 1.00;
-                            } else {
-                                // Otherwise standard A4 page height will be ignored.
-                                pageHeightInPixel = a4HeightInPX;
-                            }
-                        } else content.measure(View.MeasureSpec.EXACTLY, View.MeasureSpec.EXACTLY);
+                            pageHeightInPixel = (int) (Math.max(content.getMeasuredHeight(), a4HeightInPostScript));
+                        } else {
+                            content.measure(
+                                    View.MeasureSpec.makeMeasureSpec(pageWidthInPixel, View.MeasureSpec.EXACTLY),
+                                    View.MeasureSpec.makeMeasureSpec(pageHeightInPixel, View.MeasureSpec.EXACTLY));
+                        }
 
-                        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder((int) (pageWidthInPixel * thresholdInWidth),
-                                (int) (pageHeightInPixel * thresholdInHeight), i + 1).create();
+                        PdfDocument.PageInfo pageInfo =
+                                new PdfDocument.PageInfo.Builder((pageWidthInPixel), (pageHeightInPixel), i + 1).create();
                         PdfDocument.Page page = document.startPage(pageInfo);
 
-                        pageHeightInPixel = page.getCanvas().getHeight();
-                        pageWidthInPixel = page.getCanvas().getWidth();
-
-                        content.measure(View.MeasureSpec.makeMeasureSpec(pageWidthInPixel, View.MeasureSpec.EXACTLY),
-                                View.MeasureSpec.makeMeasureSpec(pageHeightInPixel, View.MeasureSpec.EXACTLY));
                         content.layout(0, 0, pageWidthInPixel, pageHeightInPixel);
                         content.draw(page.getCanvas());
 
