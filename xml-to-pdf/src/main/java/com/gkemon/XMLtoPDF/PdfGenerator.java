@@ -55,7 +55,19 @@ public class PdfGenerator {
     }
 
     public enum PageSize {
-        A4, A5, WRAP_CONTENT
+        /**
+         * For standard A4 size page
+         */
+        A4,
+
+        /**
+         * For standard A5 size page
+         */
+        A5,
+        /**
+         * For print the page as much as they are big.
+         */
+        WRAP_CONTENT
     }
 
 
@@ -155,9 +167,9 @@ public class PdfGenerator {
                 pdfGeneratorListener.showLog(logMessage);
         }
 
-        private void postSuccess(PdfDocument pdfDocument, File file) {
+        private void postSuccess(PdfDocument pdfDocument, File file, int widthInPS, int heightInPS) {
             if (pdfGeneratorListener != null)
-                pdfGeneratorListener.onSuccess(new SuccessResponse(pdfDocument, file));
+                pdfGeneratorListener.onSuccess(new SuccessResponse(pdfDocument, file, widthInPS, heightInPS));
         }
 
         private void openGeneratedPDF() {
@@ -217,19 +229,19 @@ public class PdfGenerator {
                             content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
                             pageHeightInPixel = content.getMeasuredHeight();
                             pageWidthInPixel = content.getMeasuredWidth();
-                        } else {
+                        }
                             /*If page size is less then standard A4 size then assign it A4 size otherwise
                             the view will be messed up or so minimized that it will be not print in pdf*/
                             pageWidthInPixel = Math.max(pageWidthInPixel, a4WidthInPX);
                             pageHeightInPixel = Math.max(pageWidthInPixel, a4HeightInPX);
-                        }
+
 
                         /*Convert page size from pixel into post script because PdfDocument takes
                          * post script as a size unit*/
                         pageHeightInPixel = (int) (pageHeightInPixel * postScriptThreshold);
                         pageWidthInPixel = (int) (pageWidthInPixel * postScriptThreshold);
 
-                        
+
                         content.measure(View.MeasureSpec.makeMeasureSpec(pageWidthInPixel, View.MeasureSpec.EXACTLY), View.MeasureSpec.UNSPECIFIED);
                         pageHeightInPixel = (int) (Math.max(content.getMeasuredHeight(), a4HeightInPostScript));
 
@@ -285,7 +297,7 @@ public class PdfGenerator {
                     try {
                         document.writeTo(new FileOutputStream(filePath));
                         //File writing is done.
-                        postSuccess(document, filePath);
+                        postSuccess(document, filePath, pageWidthInPixel, pageHeightInPixel);
                     } catch (IOException e) {
                         postFailure(e);
                     }
