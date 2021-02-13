@@ -167,6 +167,15 @@ public class PdfGenerator {
                 pdfGeneratorListener.showLog(logMessage);
         }
 
+        private void postOnGenerationStart(){
+            if(pdfGeneratorListener!=null)
+                pdfGeneratorListener.onStartPDFGeneration();
+        }
+
+        private void postOnGenerationFinished(){
+            if(pdfGeneratorListener!=null)
+                pdfGeneratorListener.onFinishPDFGeneration();
+        }
         private void postSuccess(PdfDocument pdfDocument, File file, int widthInPS, int heightInPS) {
             if (pdfGeneratorListener != null)
                 pdfGeneratorListener.onSuccess(new SuccessResponse(pdfDocument, file, widthInPS, heightInPS));
@@ -283,14 +292,14 @@ public class PdfGenerator {
                     //File is created under the folder but not yet written.
 
                     disposeDisposable();
-                    postLog("PDF generation start....");
+                    postOnGenerationStart();
                     disposable = Completable.fromAction(() -> document.writeTo(new FileOutputStream(filePath)))
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .doFinally(() -> {
                                 document.close();
                                 disposeDisposable();
-                                postLog("PDF generation is finished !");
+                                postOnGenerationFinished();
                             })
                             .subscribe(() -> {
                                 postSuccess(document, filePath, pageWidthInPixel, pageHeightInPixel);

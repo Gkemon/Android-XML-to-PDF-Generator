@@ -7,11 +7,12 @@
     android:background="@android:color/holo_red_dark"
     android:layout_margin="10dp">
 <TextView
-    android:text="Emon"
-    android:textSize="@dimen/_40ssp"
+    android:text="Test item"
+    android:textSize="@dimen/_20ssp"
     android:textColor="@android:color/white"
     android:textStyle="bold"
     android:id="@+id/tv_text"
+    android:gravity="center"
     android:layout_centerInParent="true"
     android:layout_width="wrap_content"
     android:layout_height="match_parent">

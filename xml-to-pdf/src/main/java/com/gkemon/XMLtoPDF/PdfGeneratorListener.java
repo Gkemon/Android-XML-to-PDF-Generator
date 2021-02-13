@@ -8,6 +8,10 @@ interface PdfGeneratorContract {
 
     void showLog(String log);
 
+    void onStartPDFGeneration();
+
+    void onFinishPDFGeneration();
+
     void onFailure(FailureResponse failureResponse);
 }
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.gkemon.XMLtoPDF.PdfGenerator;
 import com.gkemon.XMLtoPDF.PdfGeneratorListener;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
                 View content = inflater.inflate(R.layout.layout_print, null);
 
+                    /*Test for RecyclerView*/
                     /*RecyclerView recyclerView = (RecyclerView) content.findViewById(R.id.list);
                     recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                     recyclerView.setAdapter(new DummyItemRecyclerViewAdapter(DummyContent.ITEMS));*/
@@ -48,13 +50,21 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
                                 super.onFailure(failureResponse);
-                                Log.d(MainActivity.class.getSimpleName(), "Failure: " + failureResponse.getErrorMessage());
+                            }
+
+                            @Override
+                            public void onStartPDFGeneration() {
+
+                            }
+
+                            @Override
+                            public void onFinishPDFGeneration() {
+
                             }
 
                             @Override
                             public void showLog(String log) {
                                 super.showLog(log);
-                                Log.d(MainActivity.class.getSimpleName(), "Log: " + log);
                             }
 
                             @Override

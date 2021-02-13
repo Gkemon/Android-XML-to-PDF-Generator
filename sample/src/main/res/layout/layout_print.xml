@@ -2,16 +2,17 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-   <!-- <androidx.recyclerview.widget.RecyclerView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/list"
-        android:name="com.emon.exampleXMLtoPDF.ItemFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".ItemFragment"
-        tools:listitem="@layout/fragment_item" />-->
+    <!--Test for recycler view-->
+    <!-- <androidx.recyclerview.widget.RecyclerView
+         xmlns:app="http://schemas.android.com/apk/res-auto"
+         xmlns:tools="http://schemas.android.com/tools"
+         android:id="@+id/list"
+         android:name="com.emon.exampleXMLtoPDF.ItemFragment"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         app:layoutManager="LinearLayoutManager"
+         tools:context=".ItemFragment"
+         tools:listitem="@layout/fragment_item" />-->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -22,108 +23,108 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
 
-            <include layout="@layout/item_boxes"></include>
+            <include layout="@layout/item_boxes" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
