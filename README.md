@@ -110,7 +110,7 @@ You can generate <b>PDF</b> from many sources.
 
                             @Override
                             public void onFinishPDFGeneration() {
-                                /*When PDF generation is finished/
+                                /*When PDF generation is finished*/
                             }
 
                             @Override
@@ -156,7 +156,7 @@ You can generate <b>PDF</b> from many sources.
 
                             @Override
                             public void onFinishPDFGeneration() {
-                                /*When PDF generation is finished/
+                                /*When PDF generation is finished*/
                             }
 
                             @Override
@@ -203,7 +203,7 @@ PdfGenerator.getBuilder()
 
                             @Override
                             public void onFinishPDFGeneration() {
-                                /*When PDF generation is finished/
+                                /*When PDF generation is finished*/ 
                             }
 			    
                             @Override
