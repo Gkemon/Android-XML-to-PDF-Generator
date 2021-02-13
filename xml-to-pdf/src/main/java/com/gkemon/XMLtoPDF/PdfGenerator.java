@@ -258,6 +258,13 @@ public class PdfGenerator {
 
                         document.finishPage(page);
 
+                        /*Finally invalidate it and request layout for restore the previous state
+                        * of the view as like as the xml. Otherwise for generating PDF by view id,
+                        * the main view is being messed up because this a view is not clonable and
+                        * being modified in the above view related tasks for printing PDF. */
+                        content.invalidate();
+                        content.requestLayout();
+
                     }
 
                     //This is for prevent crashing while opening generated PDF.
