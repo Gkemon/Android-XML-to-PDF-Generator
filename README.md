@@ -75,7 +75,7 @@ allprojects {
 **Step 2**. Add the dependency
 ```
 dependencies {
-        implementation 'com.github.Gkemon:XML-to-PDF-generator:1.0'
+        implementation 'com.github.Gkemon:XML-to-PDF-generator:2.0'
 }
 ```	
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#getting-started-quick)
@@ -155,7 +155,9 @@ You can generate <b>PDF</b> from many sources.
 			/* "fromViewID()" takes array of view ids those MUST BE and MUST BE contained in the inserted "activity" .
 			 * You can also invoke "fromViewIDList()" method here which takes list of view ids instead of array. */
                         .setCustomPageSize(3000,3000)
-			/* Here I used ".setCustomPageSize(3000,3000)" to set custom page size.*/
+			/* Here I used ".setCustomPageSize(3000,3000)" to set custom page size. NOTE THAT: If your inserted page 
+			 * height,width is less than standard A4 size then custom size will be ignored and assign standard A4 
+			 * page size otherwise sometimes pages are been messed up for too low custom size.*/
                         .setFileName("Test-PDF")
                         .setFolderName("Test-PDF-folder")
                         .openPDFafterGeneration(true)
@@ -195,8 +197,9 @@ PdfGenerator.getBuilder()
                         .setContext(MainActivity.this)
                         .fromViewSource()
                         .fromView(view) 
-			/* "fromView()" takes array of view. You can also invoke "fromViewList()" method here
-			 * which takes list of view instead of array. */
+			/* Here I used ".setCustomPageSize(3000,3000)" to set custom page size. NOTE THAT: If your inserted page 
+			 * height,width is less than standard A4 size then custom size will be ignored and assign standard A4 
+			 * page size otherwise sometimes pages are been messed up for too low custom size.*/
                         .setCustomPageSize(3000,3000)
                         .setFileName("Test-PDF")
                         .setFolderName("Test-PDF-folder")
