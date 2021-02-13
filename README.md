@@ -86,7 +86,7 @@ You can generate <b>PDF</b> from many sources.
 			/* "fromLayoutXML()" takes array of layout resources.
 			 * You can also invoke "fromLayoutXMLList()" method here which takes list of layout resources instead of array. */
                         .setDefaultPageSize(PdfGenerator.PageSize.A4)
-			/* It takes default page size like A4,A5. You can also set custom page size in pixel
+			/* It takes default page size like A4,A5,WRAP_CONTENT. You can also set custom page size in pixel
 			 * by calling ".setCustomPageSize(int widthInPX, int heightInPX)" here. */
                         .setFileName("Test-PDF")
 			/* It is file name */
