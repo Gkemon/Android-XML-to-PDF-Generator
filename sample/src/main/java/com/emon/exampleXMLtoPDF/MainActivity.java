@@ -2,6 +2,7 @@ package com.emon.exampleXMLtoPDF;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -27,13 +28,19 @@ public class MainActivity extends AppCompatActivity {
 
                 LayoutInflater inflater = (LayoutInflater)
                         getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
                 View content = inflater.inflate(R.layout.layout_print, null);
+
+                    /*RecyclerView recyclerView = (RecyclerView) content.findViewById(R.id.list);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                    recyclerView.setAdapter(new DummyItemRecyclerViewAdapter(DummyContent.ITEMS));*/
+
 
                 PdfGenerator.getBuilder()
                         .setContext(MainActivity.this)
                         .fromViewSource()
                         .fromView(content)
-                        .setDefaultPageSize(PdfGenerator.PageSize.A4)
+                        .setDefaultPageSize(PdfGenerator.PageSize.WRAP_CONTENT)
                         .setFileName("TestPDF")
                         .setFolderName("Test-PDF-folder")
                         .openPDFafterGeneration(true)
@@ -41,11 +48,13 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
                                 super.onFailure(failureResponse);
+                                Log.d(MainActivity.class.getSimpleName(), "Failure: " + failureResponse.getErrorMessage());
                             }
 
                             @Override
                             public void showLog(String log) {
                                 super.showLog(log);
+                                Log.d(MainActivity.class.getSimpleName(), "Log: " + log);
                             }
 
                             @Override

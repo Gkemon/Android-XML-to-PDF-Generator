@@ -1,1 +1,10 @@
-<manifest package="com.gkemon.XMLtoPDF" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.gkemon.XMLtoPDF">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <application android:requestLegacyExternalStorage="true">
+    </application>
+
+</manifest>

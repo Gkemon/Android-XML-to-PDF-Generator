@@ -6,8 +6,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Environment;
@@ -23,19 +21,21 @@ import com.gkemon.XMLtoPDF.model.FailureResponse;
 import com.gkemon.XMLtoPDF.model.SuccessResponse;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class PdfGenerator {
 
@@ -148,7 +148,7 @@ public class PdfGenerator {
         private boolean openPdfFile = true;
         private String folderName;
         private String directory_path;
-
+        private Disposable disposable;
         private void postFailure(String errorMessage) {
             FailureResponse failureResponse = new FailureResponse(errorMessage);
             postLog(errorMessage);
@@ -190,13 +190,6 @@ public class PdfGenerator {
             }
         }
 
-        public static Bitmap loadBitmapFromView(View v, int width, int height) {
-            Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            Canvas c = new Canvas(b);
-            v.draw(c);
-            return b;
-        }
-
         private void print() {
 
             try {
@@ -226,6 +219,7 @@ public class PdfGenerator {
                         View content = viewList.get(i);
 
                         if (pageWidthInPixel == WRAP_CONTENT_HEIGHT && pageHeightInPixel == WRAP_CONTENT_WIDTH) {
+
                             content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
                             pageHeightInPixel = content.getMeasuredHeight();
                             pageWidthInPixel = content.getMeasuredWidth();
@@ -243,7 +237,7 @@ public class PdfGenerator {
 
 
                         content.measure(View.MeasureSpec.makeMeasureSpec(pageWidthInPixel, View.MeasureSpec.EXACTLY), View.MeasureSpec.UNSPECIFIED);
-                        pageHeightInPixel = (int) (Math.max(content.getMeasuredHeight(), a4HeightInPostScript));
+                        pageHeightInPixel = (Math.max(content.getMeasuredHeight(), a4HeightInPostScript));
 
 
                         PdfDocument.PageInfo pageInfo =
@@ -261,14 +255,7 @@ public class PdfGenerator {
                     StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                     StrictMode.setVmPolicy(builder.build());
 
-                    if (Environment.getExternalStorageDirectory() != null &&
-                             !TextUtils.isEmpty(Environment.getExternalStorageDirectory().getPath())) {
-                        directory_path = Environment.getExternalStorageDirectory().getPath();
-                    } else if (context.getExternalFilesDir(null) != null &&
-                            !TextUtils.isEmpty(context.getExternalFilesDir(null).getAbsolutePath())) {
-                        postLog("Environment.getExternalStorageDirectory() is returning null");
-                        directory_path = context.getExternalFilesDir(null).getAbsolutePath();
-                    }
+                    setUpDirectoryPath(context);
 
                     if (TextUtils.isEmpty(directory_path)) {
                         postFailure("Environment.getExternalStorageDirectory() and " +
@@ -294,18 +281,26 @@ public class PdfGenerator {
 
                     File filePath = new File(targetPdf);
                     //File is created under the folder but not yet written.
-                    try {
-                        document.writeTo(new FileOutputStream(filePath));
-                        //File writing is done.
-                        postSuccess(document, filePath, pageWidthInPixel, pageHeightInPixel);
-                    } catch (IOException e) {
-                        postFailure(e);
-                    }
-                    document.close();
 
-                    if (openPdfFile) {
-                        openGeneratedPDF();
-                    }
+                    disposeDisposable();
+                    postLog("PDF generation start....");
+                    disposable = Completable.fromAction(() -> document.writeTo(new FileOutputStream(filePath)))
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doFinally(() -> {
+                                document.close();
+                                disposeDisposable();
+                                postLog("PDF generation is finished !");
+                            })
+                            .subscribe(() -> {
+                                postSuccess(document, filePath, pageWidthInPixel, pageHeightInPixel);
+                                document.close();
+                                if (openPdfFile) {
+                                    openGeneratedPDF();
+                                }
+                            }, this::postFailure);
+
+
                 } else {
                     postFailure("Context is null");
                 }
@@ -313,6 +308,28 @@ public class PdfGenerator {
                 postFailure(e);
             }
 
+        }
+
+
+        private void disposeDisposable() {
+            if (disposable != null && !disposable.isDisposed())
+                disposable.dispose();
+        }
+
+        private void setUpDirectoryPath(Context context) {
+            if (Environment.getExternalStorageDirectory() != null &&
+                    !TextUtils.isEmpty(Environment.getExternalStorageDirectory().getPath())) {
+                directory_path = Environment.getExternalStorageDirectory().getPath();
+            }
+            if (((android.os.Build.VERSION.SDK_INT >= 29) || TextUtils.isEmpty(directory_path)) &&
+                    (context.getExternalFilesDir(null) != null &&
+                            !TextUtils.isEmpty(context.getExternalFilesDir(null).getAbsolutePath()))) {
+                directory_path = context.getExternalFilesDir(null).getAbsolutePath();
+                postLog("Environment.getExternalStorageDirectory() is returning null or" +
+                        " you are using Android API level 30+ which prevents to get external storage path" +
+                        "instead of using storage scope. Using context.getExternalFilesDir(null) which is " +
+                        "returning the absolute path - "+directory_path+"");
+            }
         }
 
         @Override
@@ -343,13 +360,8 @@ public class PdfGenerator {
                                                                            PermissionToken permissionToken) {
                             }
                         })
-                        .withErrorListener(new PermissionRequestErrorListener() {
-                            @Override
-                            public void onError(DexterError error) {
-                                postLog("Error from Dexter (https://github.com/Karumi/Dexter) : " +
-                                        error.toString());
-                            }
-                        }).check();
+                        .withErrorListener(error -> postLog("Error from Dexter (https://github.com/Karumi/Dexter) : " +
+                                error.toString())).check();
             }
 
         }
