@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
@@ -105,16 +106,7 @@ public class PdfGenerator {
 
 
     public interface PageSizeStep {
-        FileNameStep setDefaultPageSize(PageSize pageSize);
-
-        /**
-         * Need to improvement.
-         *
-         * @param widthInPX
-         * @param heightInPX
-         * @return
-         */
-        FileNameStep setCustomPageSize(int widthInPX, int heightInPX);
+        FileNameStep setPageSize(PageSize pageSize);
     }
 
 
@@ -232,11 +224,12 @@ public class PdfGenerator {
                             content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
                             pageHeightInPixel = content.getMeasuredHeight();
                             pageWidthInPixel = content.getMeasuredWidth();
+
+                            postScriptThreshold=1.0;
+                            postScriptThreshold=1.0;
+                            a4HeightInPostScript=pageHeightInPixel;
+
                         }
-                            /*If page size is less then standard A4 size then assign it A4 size otherwise
-                            the view will be messed up or so minimized that it will be not print in pdf*/
-                            pageWidthInPixel = Math.max(pageWidthInPixel, a4WidthInPX);
-                            pageHeightInPixel = Math.max(pageWidthInPixel, a4HeightInPX);
 
 
                         /*Convert page size from pixel into post script because PdfDocument takes
@@ -410,15 +403,8 @@ public class PdfGenerator {
         }
 
         @Override
-        public FileNameStep setDefaultPageSize(PageSize pageSize) {
+        public FileNameStep setPageSize(PageSize pageSize) {
             this.pageSize = pageSize;
-            return this;
-        }
-
-        @Override
-        public FileNameStep setCustomPageSize(int widthInPX, int heightInPX) {
-            this.pageWidthInPixel = widthInPX;
-            this.pageHeightInPixel = heightInPX;
             return this;
         }
 
