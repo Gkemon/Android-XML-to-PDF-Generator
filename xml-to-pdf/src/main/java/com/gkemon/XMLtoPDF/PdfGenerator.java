@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
@@ -219,15 +218,14 @@ public class PdfGenerator {
                     for (int i = 0; i < viewList.size(); i++) {
                         View content = viewList.get(i);
 
-                        if (pageWidthInPixel == WRAP_CONTENT_HEIGHT && pageHeightInPixel == WRAP_CONTENT_WIDTH) {
+                        if (pageWidthInPixel == WRAP_CONTENT_WIDTH && pageHeightInPixel == WRAP_CONTENT_HEIGHT) {
 
                             content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
                             pageHeightInPixel = content.getMeasuredHeight();
                             pageWidthInPixel = content.getMeasuredWidth();
 
-                            postScriptThreshold=1.0;
-                            postScriptThreshold=1.0;
-                            a4HeightInPostScript=pageHeightInPixel;
+                            postScriptThreshold = 1.0;
+                            a4HeightInPostScript = pageHeightInPixel;
 
                         }
 
