@@ -101,9 +101,8 @@ You can generate <b>PDF</b> from many sources.
                         .fromLayoutXML(R.layout.layout_print,R.layout.layout_print)
 			/* "fromLayoutXML()" takes array of layout resources.
 			 * You can also invoke "fromLayoutXMLList()" method here which takes list of layout resources instead of array. */
-                        .setDefaultPageSize(PdfGenerator.PageSize.A4)
-			/* It takes default page size like A4,A5,WRAP_CONTENT. You can also set custom page size in pixel
-			 * by calling ".setCustomPageSize(int widthInPX, int heightInPX)" here. */
+                        .setPageSize(PdfGenerator.PageSize.A4)
+			/* It takes default page size like A4,A5,WRAP_CONTENT.*/
                         .setFileName("Test-PDF")
 			/* It is file name */
                         .setFolderName("FolderA/FolderB/FolderC")
@@ -154,10 +153,7 @@ You can generate <b>PDF</b> from many sources.
                         .fromViewID(activity,R.id.tv_print_area,R.id.tv_print_area)
 			/* "fromViewID()" takes array of view ids those MUST BE and MUST BE contained in the inserted "activity" .
 			 * You can also invoke "fromViewIDList()" method here which takes list of view ids instead of array. */
-                        .setCustomPageSize(3000,3000)
-			/* Here I used ".setCustomPageSize(3000,3000)" to set custom page size. NOTE THAT: If your inserted page 
-			 * height,width is less than standard A4 size then custom size will be ignored and assign standard A4 
-			 * page size otherwise sometimes pages are been messed up for too low custom size.*/
+                        .setPageSize(PdfGenerator.PageSize.A4)
                         .setFileName("Test-PDF")
                         .setFolderName("Test-PDF-folder")
                         .openPDFafterGeneration(true)
@@ -196,11 +192,8 @@ You can generate <b>PDF</b> from many sources.
 PdfGenerator.getBuilder()
                         .setContext(MainActivity.this)
                         .fromViewSource()
-                        .fromView(view) 
-			/* Here I used ".setCustomPageSize(3000,3000)" to set custom page size. NOTE THAT: If your inserted page 
-			 * height,width is less than standard A4 size then custom size will be ignored and assign standard A4 
-			 * page size otherwise sometimes pages are been messed up for too low custom size.*/
-                        .setCustomPageSize(3000,3000)
+                        .fromView(view)
+			.setPageSize(PdfGenerator.PageSize.A4)
                         .setFileName("Test-PDF")
                         .setFolderName("Test-PDF-folder")
                         .openPDFafterGeneration(true)
