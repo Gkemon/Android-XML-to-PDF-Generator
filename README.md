@@ -75,7 +75,7 @@ allprojects {
 **Step 2**. Add the dependency
 ```
 dependencies {
-        implementation 'com.github.Gkemon:XML-to-PDF-generator:2.0'
+        implementation 'com.github.Gkemon:XML-to-PDF-generator:2.1'
 }
 ```	
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#getting-started-quick)
