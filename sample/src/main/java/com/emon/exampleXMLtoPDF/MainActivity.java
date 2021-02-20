@@ -2,13 +2,11 @@ package com.emon.exampleXMLtoPDF;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.gkemon.XMLtoPDF.PdfGenerator;
 import com.gkemon.XMLtoPDF.PdfGeneratorListener;
@@ -30,10 +28,10 @@ public class MainActivity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater)
                         getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                View content = inflater.inflate(R.layout.layout_print, null);
+                View content = inflater.inflate(R.layout.barcode, null);
 
-                    /*Test for RecyclerView*/
-                    /*RecyclerView recyclerView = (RecyclerView) content.findViewById(R.id.list);
+                /*  Test for RecyclerView*/
+                 /*   RecyclerView recyclerView = content.findViewById(R.id.list);
                     recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                     recyclerView.setAdapter(new DummyItemRecyclerViewAdapter(DummyContent.ITEMS));*/
 
@@ -42,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                         .setContext(MainActivity.this)
                         .fromViewSource()
                         .fromView(content)
-                        .setDefaultPageSize(PdfGenerator.PageSize.WRAP_CONTENT)
+                        .setPageSize(PdfGenerator.PageSize.A4)
                         .setFileName("TestPDF")
                         .setFolderName("Test-PDF-folder")
                         .openPDFafterGeneration(true)

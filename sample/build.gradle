@@ -31,7 +31,7 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     /*Comment out the line below if you want to use library from jitpack repo*/
-    //implementation 'com.github.Gkemon:XML-to-PDF-generator:1.0'
+   /* implementation 'com.github.Gkemon:XML-to-PDF-generator:2.1'*/
 
     implementation 'com.intuit.ssp:ssp-android:1.0.5'
     implementation 'com.intuit.sdp:sdp-android:1.0.5'

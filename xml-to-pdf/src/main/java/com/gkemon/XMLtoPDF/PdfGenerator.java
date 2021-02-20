@@ -16,15 +16,17 @@ import android.view.View;
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.gkemon.XMLtoPDF.model.FailureResponse;
 import com.gkemon.XMLtoPDF.model.SuccessResponse;
 import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,6 +37,7 @@ import java.util.List;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class PdfGenerator {
@@ -138,7 +141,7 @@ public class PdfGenerator {
         private String targetPdf;
         private boolean openPdfFile = true;
         private String folderName;
-        private String directory_path;
+        private String directoryPath;
         private Disposable disposable;
         private void postFailure(String errorMessage) {
             FailureResponse failureResponse = new FailureResponse(errorMessage);
@@ -157,7 +160,6 @@ public class PdfGenerator {
             if (pdfGeneratorListener != null)
                 pdfGeneratorListener.showLog(logMessage);
         }
-
         private void postOnGenerationStart(){
             if(pdfGeneratorListener!=null)
                 pdfGeneratorListener.onStartPDFGeneration();
@@ -175,17 +177,22 @@ public class PdfGenerator {
         private void openGeneratedPDF() {
             File file = new File(targetPdf);
             if (file.exists()) {
+                Uri path = FileProvider.getUriForFile(context, BuildConfig.LIBRARY_PACKAGE_NAME + ".provider", file);
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                Uri uri = Uri.fromFile(file);
-                intent.setDataAndType(uri, "*/*");
+                intent.setDataAndType(path, "application/pdf");
+
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
                 try {
                     context.startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     postFailure(e);
                 }
             } else {
-                String path = TextUtils.isEmpty(directory_path) ? "null" : directory_path;
+                String path = TextUtils.isEmpty(directoryPath) ? "null" : directoryPath;
                 postFailure("PDF file is not existing in storage. Your Generated path is " + path);
             }
         }
@@ -264,18 +271,16 @@ public class PdfGenerator {
 
                     setUpDirectoryPath(context);
 
-                    if (TextUtils.isEmpty(directory_path)) {
-                        postFailure("Environment.getExternalStorageDirectory() and " +
-                                "context.getExternalFilesDir()" +
-                                " is returning null");
+                    if (TextUtils.isEmpty(directoryPath)) {
+                        postFailure("Cannot find the storage path to create the pdf file.");
                         return;
                     }
 
 
-                    directory_path = directory_path + "/" + folderName + "/";
+                    directoryPath = directoryPath + "/" + folderName + "/";
 
 
-                    File file = new File(directory_path);
+                    File file = new File(directoryPath);
                     if (!file.exists()) {
                         if (!file.mkdirs()) {
                             postLog("Folder is not created." +
@@ -284,7 +289,7 @@ public class PdfGenerator {
                         //Folder is made here
                     }
 
-                    targetPdf = directory_path + fileName + ".pdf";
+                    targetPdf = directoryPath + fileName + ".pdf";
 
                     File filePath = new File(targetPdf);
                     //File is created under the folder but not yet written.
@@ -301,7 +306,6 @@ public class PdfGenerator {
                             })
                             .subscribe(() -> {
                                 postSuccess(document, filePath, pageWidthInPixel, pageHeightInPixel);
-                                document.close();
                                 if (openPdfFile) {
                                     openGeneratedPDF();
                                 }
@@ -324,47 +328,68 @@ public class PdfGenerator {
         }
 
         private void setUpDirectoryPath(Context context) {
-            if (Environment.getExternalStorageDirectory() != null &&
-                    !TextUtils.isEmpty(Environment.getExternalStorageDirectory().getPath())) {
-                directory_path = Environment.getExternalStorageDirectory().getPath();
+
+            String state = Environment.getExternalStorageState();
+
+            // Make sure it's available
+            if (!TextUtils.isEmpty(state) && Environment.MEDIA_MOUNTED.equals(state)) {
+                postLog("Your external storage is mounted");
+                // We can read and write the media
+                directoryPath = context.getExternalFilesDir(null) != null ?
+                        context.getExternalFilesDir(null).getAbsolutePath() : "";
+
+                if (TextUtils.isEmpty(directoryPath))
+                postLog("context.getExternalFilesDir().getAbsolutePath() is returning null.");
+
+            } else {
+                postLog("Your external storage is unmounted");
+                // Load another directory, probably local memory
+                directoryPath = context.getFilesDir() != null ? context.getFilesDir().getAbsolutePath() : "";
+                if (TextUtils.isEmpty(directoryPath))
+                    postFailure("context.getFilesDir().getAbsolutePath() is also returning null.");
+                else postLog("PDF file creation path is " + directoryPath);
             }
-            if (((android.os.Build.VERSION.SDK_INT >= 29) || TextUtils.isEmpty(directory_path)) &&
-                    (context.getExternalFilesDir(null) != null &&
-                            !TextUtils.isEmpty(context.getExternalFilesDir(null).getAbsolutePath()))) {
-                directory_path = context.getExternalFilesDir(null).getAbsolutePath();
-                postLog("Environment.getExternalStorageDirectory() is returning null or" +
-                        " you are using Android API level 30+ which prevents to get external storage path" +
-                        "instead of using storage scope. Using context.getExternalFilesDir(null) which is " +
-                        "returning the absolute path - "+directory_path+"");
-            }
+        }
+
+        private boolean hasAllPermission(Context context) {
+            postFailure("Context is null");
+            return context != null && (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+                    && (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
         }
 
         @Override
         public void build(PdfGeneratorListener pdfGeneratorListener) {
             this.pdfGeneratorListener = pdfGeneratorListener;
-            if (ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (hasAllPermission(context)) {
                 print();
             } else {
-                postLog("WRITE_EXTERNAL_STORAGE Permission is not given." +
+                postLog("WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE Permission is not given." +
                         " Permission taking popup (using https://github.com/Karumi/Dexter) is going " +
                         "to be shown");
                 Dexter.withContext(context)
-                        .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        .withListener(new PermissionListener() {
+                        .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        .withListener(new MultiplePermissionsListener() {
                             @Override
-                            public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-                                print();
+                            public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+
+                                for (PermissionDeniedResponse deniedResponse : multiplePermissionsReport.getDeniedPermissionResponses()) {
+                                    postLog("Denied permission: " + deniedResponse.getPermissionName());
+                                }
+                                for (PermissionGrantedResponse grantedResponse : multiplePermissionsReport.getGrantedPermissionResponses()) {
+                                    postLog("Granted permission: " + grantedResponse.getPermissionName());
+                                }
+                                if (multiplePermissionsReport.areAllPermissionsGranted()) {
+                                    print();
+                                } else
+                                    postLog("All necessary permission is not granted by user.Please do that first");
+
                             }
 
                             @Override
-                            public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-                                postLog("WRITE_EXTERNAL_STORAGE Permission is denied by user.");
-                            }
+                            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
 
-                            @Override
-                            public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest,
-                                                                           PermissionToken permissionToken) {
                             }
                         })
                         .withErrorListener(error -> postLog("Error from Dexter (https://github.com/Karumi/Dexter) : " +

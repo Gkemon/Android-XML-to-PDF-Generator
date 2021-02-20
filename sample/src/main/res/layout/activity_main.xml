@@ -17,7 +17,7 @@
         android:id="@+id/tv_print_area"
         android:gravity="center"
         android:textAlignment="center"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="500dp"
         android:text="Hi, Im am a dummy XML" />
     <Button
