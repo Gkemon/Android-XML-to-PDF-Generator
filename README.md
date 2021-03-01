@@ -75,7 +75,7 @@ allprojects {
 **Step 2**. Add the dependency
 ```
 dependencies {
-        implementation 'com.github.Gkemon:XML-to-PDF-generator:2.2'
+        implementation 'com.github.Gkemon:XML-to-PDF-generator:2.3'
 }
 ```	
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#getting-started-quick)
@@ -150,9 +150,9 @@ You can generate <b>PDF</b> from many sources.
     PdfGenerator.getBuilder()
                         .setContext(context)
                         .fromViewIDSource()
-                        .fromViewID(activity,R.id.tv_print_area,R.id.tv_print_area)
-			/* "fromViewID()" takes array of view ids those MUST BE and MUST BE contained in the inserted "activity" .
-			 * You can also invoke "fromViewIDList()" method here which takes list of view ids instead of array. */
+                        .fromViewID(R.layout.hostLayout,activity,R.id.tv_print_area,R.id.tv_print_area)
+			/* "fromViewID()" takes array of view ids and the host layout xml where the view ids are belonging.
+			 * You can also invoke "fromViewIDList()" method here which takes list of view ids instead of array.*/
                         .setPageSize(PdfGenerator.PageSize.A4)
                         .setFileName("Test-PDF")
                         .setFolderName("Test-PDF-folder")
@@ -243,8 +243,11 @@ If you want create multi-paged pdf from xmls-
 `.fromViewID(view1,view1)`
 
 ### How to deal with generated PDF? 
-With a method calling named `openPDFafterGeneration(true)`, the generated file will be automatically opened automatically. [FileProvider](https://developer.android.com/reference/androidx/core/content/FileProvider) is used to open file here. To get a good insight about it please see the [tutorial](https://vladsonkin.com/how-to-share-files-with-android-fileprovider/). The `android:authorities` name in the app is `com.gkemon.XMLtoPDF.provider` which might be needed if you want to deal with generated file customly,not letting the app open the generated file. you will get the generated file path in `onSuccess(SuccessResponse response)` response.
+With a method calling named `openPDFafterGeneration(true)`, the generated file will be automatically opened automatically. [FileProvider](https://developer.android.com/reference/androidx/core/content/FileProvider) is used to open file here. To get a good insight about it please see the [tutorial](https://vladsonkin.com/how-to-share-files-with-android-fileprovider/). The `android:authorities` name in the app is `${applicationId}.xmlToPdf.provider` which might be needed if you want to deal with generated file customly,not letting the app open the generated file. you will get the generated file path in `onSuccess(SuccessResponse response)` response.
 
+### Troubleshoot
+* For WRAP_CONTENT page size, try to avoid to provide `match_parent` and `wrap_content` height/width in XML. So it specifically. 
+* If any of your footer view is not placed the footer position then you need adjust it using `marginTop` and keep it in a `ScrollView`.For example this [issue](https://github.com/Gkemon/Android-XML-to-PDF-Generator/issues/16) is fixed by rearranging XML like [this](https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/master/sample/src/main/res/layout/layout_test_invoice.xml)
 
 So if you find any trouble,then you are also welcomed again to knock me.Thank you so much. 
 		
