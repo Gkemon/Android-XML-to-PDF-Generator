@@ -105,9 +105,9 @@ public class PdfGenerator {
          * @param xmlResourceList       The view ids which will be printed.
          * @return
          */
-        PageSizeStep fromViewID(Activity activity, @LayoutRes Integer relatedParentLayoutID, @IdRes Integer... xmlResourceList);
+        PageSizeStep fromViewID(@LayoutRes Integer relatedParentLayoutID, Activity activity, @IdRes Integer... xmlResourceList);
 
-        PageSizeStep fromViewIDList(Activity activity, @LayoutRes Integer relatedParentLayoutID, @IdRes List<Integer> xmlResourceList);
+        PageSizeStep fromViewIDList(@LayoutRes Integer relatedParentLayoutID, Activity activity, @IdRes List<Integer> xmlResourceList);
 
     }
 
@@ -453,13 +453,13 @@ public class PdfGenerator {
 
 
         @Override
-        public PageSizeStep fromViewID(Activity activity, @LayoutRes Integer relatedParentLayout, @IdRes Integer... viewIDs) {
-            viewList = Utils.getViewListFromID(activity, relatedParentLayout, Arrays.asList(viewIDs), pdfGeneratorListener);
+        public PageSizeStep fromViewID(@LayoutRes Integer relatedParentLayoutID, Activity activity, @IdRes Integer... xmlResourceList) {
+            viewList = Utils.getViewListFromID(activity, relatedParentLayoutID, Arrays.asList(xmlResourceList), pdfGeneratorListener);
             return this;
         }
 
         @Override
-        public PageSizeStep fromViewIDList(Activity activity, @LayoutRes Integer relatedParentLayout, List<Integer> viewIDList) {
+        public PageSizeStep fromViewIDList(@LayoutRes Integer relatedParentLayout, Activity activity, List<Integer> viewIDList) {
             viewList = Utils.getViewListFromID(activity, relatedParentLayout, viewIDList, pdfGeneratorListener);
             return this;
         }
