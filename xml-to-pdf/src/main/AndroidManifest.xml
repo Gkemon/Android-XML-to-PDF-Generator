@@ -7,7 +7,7 @@
     <application android:requestLegacyExternalStorage="true">
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.gkemon.XMLtoPDF.provider"
+            android:authorities="${applicationId}.xmlToPdf.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

@@ -37,7 +37,6 @@ import java.util.List;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class PdfGenerator {
@@ -100,9 +99,15 @@ public class PdfGenerator {
     }
 
     public interface ViewIDSourceIntakeStep {
-        PageSizeStep fromViewID(Activity activity, @IdRes Integer... xmlResourceList);
+        /**
+         * @param activity              Host activity.
+         * @param relatedParentLayoutID The layout id of parent xml where the view ids are belonging (e.g- R.layout.my_layout).
+         * @param xmlResourceList       The view ids which will be printed.
+         * @return
+         */
+        PageSizeStep fromViewID(Activity activity, @LayoutRes Integer relatedParentLayoutID, @IdRes Integer... xmlResourceList);
 
-        PageSizeStep fromViewIDList(Activity activity, @IdRes List<Integer> xmlResourceList);
+        PageSizeStep fromViewIDList(Activity activity, @LayoutRes Integer relatedParentLayoutID, @IdRes List<Integer> xmlResourceList);
 
     }
 
@@ -177,7 +182,7 @@ public class PdfGenerator {
         private void openGeneratedPDF() {
             File file = new File(targetPdf);
             if (file.exists()) {
-                Uri path = FileProvider.getUriForFile(context, BuildConfig.LIBRARY_PACKAGE_NAME + ".provider", file);
+                Uri path = FileProvider.getUriForFile(context, context.getPackageName() + ".xmlToPdf.provider", file);
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(path, "application/pdf");
 
@@ -352,11 +357,14 @@ public class PdfGenerator {
         }
 
         private boolean hasAllPermission(Context context) {
-            postFailure("Context is null");
-            return context != null && (ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-                    && (ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+            if (context == null) {
+                postFailure("Context is null");
+                return false;
+            }
+            return ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(context,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         }
 
         @Override
@@ -445,14 +453,14 @@ public class PdfGenerator {
 
 
         @Override
-        public PageSizeStep fromViewID(Activity activity, @IdRes Integer... viewIDs) {
-            viewList = Utils.getViewListFromID(activity, Arrays.asList(viewIDs));
+        public PageSizeStep fromViewID(Activity activity, @LayoutRes Integer relatedParentLayout, @IdRes Integer... viewIDs) {
+            viewList = Utils.getViewListFromID(activity, relatedParentLayout, Arrays.asList(viewIDs), pdfGeneratorListener);
             return this;
         }
 
         @Override
-        public PageSizeStep fromViewIDList(Activity activity, List<Integer> viewIDList) {
-            viewList = Utils.getViewListFromID(activity, viewIDList);
+        public PageSizeStep fromViewIDList(Activity activity, @LayoutRes Integer relatedParentLayout, List<Integer> viewIDList) {
+            viewList = Utils.getViewListFromID(activity, relatedParentLayout, viewIDList, pdfGeneratorListener);
             return this;
         }
 
