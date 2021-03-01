@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 PdfGenerator.getBuilder()
                         .setContext(MainActivity.this)
                         .fromViewIDSource()
-                        .fromViewID(MainActivity.this,R.layout.layout_test_invoice,R.id.invoice_layout)
+                        .fromViewID(R.layout.layout_test_invoice,MainActivity.this,R.id.invoice_layout)
                         .setPageSize(PdfGenerator.PageSize.A4)
                         .setFileName("TestPDF")
                         .setFolderName("Test-PDF-folder")
