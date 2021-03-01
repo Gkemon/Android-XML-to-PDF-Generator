@@ -75,7 +75,7 @@ allprojects {
 **Step 2**. Add the dependency
 ```
 dependencies {
-        implementation 'com.github.Gkemon:XML-to-PDF-generator:2.1'
+        implementation 'com.github.Gkemon:XML-to-PDF-generator:2.2'
 }
 ```	
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#getting-started-quick)
@@ -241,6 +241,9 @@ If you want create multi-paged pdf from xmls-
  If you want create multi-paged pdf from views-
  
 `.fromViewID(view1,view1)`
+
+### How to deal with generated PDF? 
+With a method calling named `openPDFafterGeneration(true)`, the generated file will be automatically opened automatically. [FileProvider](https://developer.android.com/reference/androidx/core/content/FileProvider) is used to open file here. To get a good insight about it please see the [tutorial](https://vladsonkin.com/how-to-share-files-with-android-fileprovider/). The `android:authorities` name in the app is `com.gkemon.XMLtoPDF.provider` which might be needed if you want to deal with generated file customly,not letting the app open the generated file. you will get the generated file path in `onSuccess(SuccessResponse response)` response.
 
 
 So if you find any trouble,then you are also welcomed again to knock me.Thank you so much. 
