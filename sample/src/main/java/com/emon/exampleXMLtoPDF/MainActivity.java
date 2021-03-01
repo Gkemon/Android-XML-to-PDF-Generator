@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
                 PdfGenerator.getBuilder()
                         .setContext(MainActivity.this)
-                        .fromViewSource()
-                        .fromView(content)
+                        .fromViewIDSource()
+                        .fromViewID(MainActivity.this,R.layout.layout_test_invoice,R.id.invoice_layout)
                         .setPageSize(PdfGenerator.PageSize.A4)
                         .setFileName("TestPDF")
                         .setFolderName("Test-PDF-folder")
@@ -49,17 +49,14 @@ public class MainActivity extends AppCompatActivity {
                             public void onFailure(FailureResponse failureResponse) {
                                 super.onFailure(failureResponse);
                             }
-
                             @Override
                             public void onStartPDFGeneration() {
 
                             }
-
                             @Override
                             public void onFinishPDFGeneration() {
 
                             }
-
                             @Override
                             public void showLog(String log) {
                                 super.showLog(log);
