@@ -242,8 +242,12 @@ If you want create multi-paged pdf from xmls-
  
 `.fromViewID(view1,view1)`
 
+### How to print an Invoice Or Report ? 
+Sometimes people gets stuck to print invoice or report via this library.So I wrote an example invoice/report printing fragment to visualise how to print an <b>Invoice</b> or <b>Report</b>. Here is [the link also with an important documentation](https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/608b873e9f21ed1dbf345a191337a5a548fd3517/sample/src/main/java/com/emon/exampleXMLtoPDF/demoInvoice/DemoInvoiceFragment.java#L61) 
+
+
 ### How to deal with generated PDF? 
-With a method calling named `openPDFafterGeneration(true)`, the generated file will be automatically opened automatically. [FileProvider](https://developer.android.com/reference/androidx/core/content/FileProvider) is used to open file here. To get a good insight about it please see the [tutorial](https://vladsonkin.com/how-to-share-files-with-android-fileprovider/). The `android:authorities` name in the app is `${applicationId}.xmlToPdf.provider` which might be needed if you want to deal with generated file customly,not letting the app open the generated file. you will get the generated file path in `onSuccess(SuccessResponse response)` response.
+With a method calling named `openPDFafterGeneration(true)`, the generated file will be automatically opened automatically.So you <b>DON'T NEED TO BE BOTHER FOR IT</b>. [FileProvider](https://developer.android.com/reference/androidx/core/content/FileProvider) is used to open file here. To get a good insight about it please see the [tutorial](https://vladsonkin.com/how-to-share-files-with-android-fileprovider/). The `android:authorities` name in the app is `${applicationId}.xmlToPdf.provider` which might be needed if you want to deal with generated file <b>CUSTOMLY</b>,not letting the app open the generated file. you will get the generated file path in `onSuccess(SuccessResponse response)` response.
 
 ### Troubleshoot
 * For WRAP_CONTENT page size, try to avoid to provide `match_parent` and `wrap_content` height/width in XML. So it specifically. 
