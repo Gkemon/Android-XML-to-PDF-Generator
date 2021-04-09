@@ -8,19 +8,24 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.emon.exampleXMLtoPDF.demoInvoice.DemoInvoiceFragment;
 import com.gkemon.XMLtoPDF.PdfGenerator;
 import com.gkemon.XMLtoPDF.PdfGeneratorListener;
 import com.gkemon.XMLtoPDF.model.FailureResponse;
 import com.gkemon.XMLtoPDF.model.SuccessResponse;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnPrint;
+    Button btnPrint,btnInvoice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         btnPrint=findViewById(R.id.bt_print);
+        btnInvoice=findViewById(R.id.bt_invoice);
+
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +73,14 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
 
+            }
+        });
+
+        btnInvoice.setOnClickListener(v -> {
+            if (getSupportFragmentManager().findFragmentById(android.R.id.content)==null) {
+                getSupportFragmentManager().beginTransaction()
+                        .add(android.R.id.content, new DemoInvoiceFragment())
+                        .commit();
             }
         });
 

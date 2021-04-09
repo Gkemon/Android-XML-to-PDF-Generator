@@ -31,5 +31,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </Button>
+    <Button
+        android:id="@+id/bt_invoice"
+        android:text="Print demo invoice me"
+        android:textAllCaps="false"
+        android:layout_margin="20dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center|bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </Button>
 
 </LinearLayout>
