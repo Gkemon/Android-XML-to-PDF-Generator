@@ -42,10 +42,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class PdfGenerator {
 
     public static double postScriptThreshold = 0.75;
-    public static int a4HeightInPX = 3508;
-    public static int a4WidthInPX = 2480;
-    public static int a5HeightInPX = 1748;
-    public static int a5WidthInPX = 2480;
+    public final static int a4HeightInPX = 3508;
+    public final static int a4WidthInPX = 2480;
+    public final static int a5HeightInPX = 1748;
+    public final static int a5WidthInPX = 2480;
 
     public static int a4HeightInPostScript = (int) (a4HeightInPX * postScriptThreshold);
     public static int a4WidthInPostScript = (int) (a4WidthInPX * postScriptThreshold);
@@ -202,34 +202,39 @@ public class PdfGenerator {
             }
         }
 
+        /**
+         * We should reset the value of the page otherwise page size might be differ for each page
+         */
+        private void resetValue(){
+            if (pageSize != null) {
+                if (pageSize == PageSize.A4) {
+                    pageHeightInPixel = a4HeightInPX;
+                    pageWidthInPixel = a4WidthInPX;
+                } else if (pageSize == PageSize.A5) {
+                    pageHeightInPixel = a5HeightInPX;
+                    pageWidthInPixel = a5WidthInPX;
+                } else if (pageSize == PageSize.WRAP_CONTENT) {
+                    pageWidthInPixel = WRAP_CONTENT_WIDTH;
+                    pageHeightInPixel = WRAP_CONTENT_HEIGHT;
+                }
+            } else {
+                postLog("Default page size is not found. Your custom page width is " +
+                        pageWidthInPixel+" and custom page height is "+pageHeightInPixel);
+            }
+
+            postScriptThreshold = 0.75;
+            a4HeightInPostScript = (int) (a4HeightInPX * postScriptThreshold);
+        }
         private void print() {
 
             try {
                 if (context != null) {
                     PdfDocument document = new PdfDocument();
-
-                    if (pageSize != null) {
-                        if (pageSize == PageSize.A4) {
-                            pageHeightInPixel = a4HeightInPX;
-                            pageWidthInPixel = a4WidthInPX;
-                        } else if (pageSize == PageSize.A5) {
-                            pageHeightInPixel = a5HeightInPX;
-                            pageWidthInPixel = a5WidthInPX;
-                        } else if (pageSize == PageSize.WRAP_CONTENT) {
-                            pageWidthInPixel = WRAP_CONTENT_WIDTH;
-                            pageHeightInPixel = WRAP_CONTENT_HEIGHT;
-                        }
-                    } else {
-                        postLog("Default page size is not found. Your custom page width is " +
-                                pageWidthInPixel+" and custom page height is "+pageHeightInPixel);
-                    }
-
-
                     if (viewList == null || viewList.size() == 0)
                         postLog("View list null or zero sized");
                     for (int i = 0; i < viewList.size(); i++) {
+                        resetValue();
                         View content = viewList.get(i);
-
                         if (pageWidthInPixel == WRAP_CONTENT_WIDTH && pageHeightInPixel == WRAP_CONTENT_HEIGHT) {
 
                             content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
