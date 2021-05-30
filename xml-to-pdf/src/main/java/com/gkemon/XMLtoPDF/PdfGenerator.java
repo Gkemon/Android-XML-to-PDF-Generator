@@ -148,8 +148,8 @@ public class PdfGenerator {
             , FromSourceStep, ContextStep {
 
         private static int NO_XML_SELECTED_YET = -1;
-        private int pageWidthInPixel = a4WidthInPX;
-        private int pageHeightInPixel = a4HeightInPX;
+        private int pageWidthInPixel = WRAP_CONTENT_WIDTH;
+        private int pageHeightInPixel = WRAP_CONTENT_HEIGHT;
         private Context context;
         private PageSize pageSize;
         private PdfGeneratorListener pdfGeneratorListener;
@@ -238,8 +238,8 @@ public class PdfGenerator {
                     pageHeightInPixel = WRAP_CONTENT_HEIGHT;
                 }
             } else {
-                postLog("Default page size is not found. Your custom page width is " +
-                        pageWidthInPixel + " and custom page height is " + pageHeightInPixel);
+                /*postLog("Page size is not found. Your custom page width is " +
+                        pageWidthInPixel + " and custom page height is " + pageHeightInPixel);*/
             }
 
             postScriptThreshold = 0.75;
