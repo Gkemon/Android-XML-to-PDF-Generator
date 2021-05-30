@@ -59,12 +59,26 @@ public class PdfGenerator {
     public enum PageSize {
         /**
          * For standard A4 size page
+         * @deprecated For printing well-formed ISO standard sized papers(like-A4,A5 sized pdf,you
+         * don't need to be concerned about width and height.Please set width and height to the xml
+         * with an aspect ratio 1:√2. For example if your xml width is 100 dp then the height of the
+         * xml will be (100 X √2) = 142 dp. Finally when we print them with any kind of ISO standard
+         * paper, then they will be auto scaled and fit into the specific paper.
+         * Reference:http://tolerancing.net/engineering-drawing/paper-size.html
          */
+        @Deprecated
         A4,
 
         /**
          * For standard A5 size page
+         * @deprecated For printing well-formed ISO standard sized papers(like-A4,A5 sized pdf,you
+         * don't need to be concerned about width and height.Please set width and height to the xml
+         * with an aspect ratio 1:√2. For example if your xml width is 100 dp then the height of the
+         * xml will be (100 X √2) = 142 dp. Finally when we print them with any kind of ISO standard
+         * paper, then they will be auto scaled and fit into the specific paper.
+         * Reference:http://tolerancing.net/engineering-drawing/paper-size.html
          */
+        @Deprecated
         A5,
         /**
          * For print the page as much as they are big.
@@ -87,15 +101,13 @@ public class PdfGenerator {
 
 
     public interface ViewSourceIntakeStep {
-        PageSizeStep fromView(View... viewList);
-
-        PageSizeStep fromViewList(List<View> viewList);
+        FileNameStep fromView(View... viewList);
+        FileNameStep fromViewList(List<View> viewList);
     }
 
     public interface LayoutXMLSourceIntakeStep {
-        PageSizeStep fromLayoutXML(@LayoutRes Integer... layoutXMLs);
-
-        PageSizeStep fromLayoutXMLList(@LayoutRes List<Integer> layoutXMLList);
+        FileNameStep fromLayoutXML(@LayoutRes Integer... layoutXMLs);
+        FileNameStep fromLayoutXMLList(@LayoutRes List<Integer> layoutXMLList);
     }
 
     public interface ViewIDSourceIntakeStep {
@@ -105,9 +117,9 @@ public class PdfGenerator {
          * @param xmlResourceList       The view ids which will be printed.
          * @return
          */
-        PageSizeStep fromViewID(@LayoutRes Integer relatedParentLayoutID, Activity activity, @IdRes Integer... xmlResourceList);
+        FileNameStep fromViewID(@LayoutRes Integer relatedParentLayoutID, Activity activity, @IdRes Integer... xmlResourceList);
+        FileNameStep fromViewIDList(@LayoutRes Integer relatedParentLayoutID, Activity activity, @IdRes List<Integer> xmlResourceList);
 
-        PageSizeStep fromViewIDList(@LayoutRes Integer relatedParentLayoutID, Activity activity, @IdRes List<Integer> xmlResourceList);
 
     }
 
@@ -148,6 +160,7 @@ public class PdfGenerator {
         private String folderName;
         private String directoryPath;
         private Disposable disposable;
+
         private void postFailure(String errorMessage) {
             FailureResponse failureResponse = new FailureResponse(errorMessage);
             postLog(errorMessage);
@@ -165,47 +178,54 @@ public class PdfGenerator {
             if (pdfGeneratorListener != null)
                 pdfGeneratorListener.showLog(logMessage);
         }
-        private void postOnGenerationStart(){
-            if(pdfGeneratorListener!=null)
+
+        private void postOnGenerationStart() {
+            if (pdfGeneratorListener != null)
                 pdfGeneratorListener.onStartPDFGeneration();
         }
 
-        private void postOnGenerationFinished(){
-            if(pdfGeneratorListener!=null)
+        private void postOnGenerationFinished() {
+            if (pdfGeneratorListener != null)
                 pdfGeneratorListener.onFinishPDFGeneration();
         }
+
         private void postSuccess(PdfDocument pdfDocument, File file, int widthInPS, int heightInPS) {
             if (pdfGeneratorListener != null)
                 pdfGeneratorListener.onSuccess(new SuccessResponse(pdfDocument, file, widthInPS, heightInPS));
         }
 
         private void openGeneratedPDF() {
-            File file = new File(targetPdf);
-            if (file.exists()) {
-                Uri path = FileProvider.getUriForFile(context, context.getPackageName() + ".xmlToPdf.provider", file);
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(path, "application/pdf");
+            try {
+                File file = new File(targetPdf);
+                if (file.exists()) {
+                    Uri path = FileProvider.getUriForFile(context, context.getPackageName() + ".xmlToPdf.provider", file);
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(path, "application/pdf");
 
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
-                try {
-                    context.startActivity(intent);
-                } catch (ActivityNotFoundException e) {
-                    postFailure(e);
+                    try {
+                        context.startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        postFailure(e);
+                    }
+                } else {
+                    String path = TextUtils.isEmpty(directoryPath) ? "null" : directoryPath;
+                    postFailure("PDF file is not existing in storage. Your Generated path is " + path);
                 }
-            } else {
-                String path = TextUtils.isEmpty(directoryPath) ? "null" : directoryPath;
-                postFailure("PDF file is not existing in storage. Your Generated path is " + path);
+            } catch (Exception exception) {
+                postFailure("Error occurred while opening the PDF. Error message : " + exception.getMessage());
             }
+
         }
 
         /**
          * We should reset the value of the page otherwise page size might be differ for each page
          */
-        private void resetValue(){
+        private void resetValue() {
             if (pageSize != null) {
                 if (pageSize == PageSize.A4) {
                     pageHeightInPixel = a4HeightInPX;
@@ -219,12 +239,13 @@ public class PdfGenerator {
                 }
             } else {
                 postLog("Default page size is not found. Your custom page width is " +
-                        pageWidthInPixel+" and custom page height is "+pageHeightInPixel);
+                        pageWidthInPixel + " and custom page height is " + pageHeightInPixel);
             }
 
             postScriptThreshold = 0.75;
             a4HeightInPostScript = (int) (a4HeightInPX * postScriptThreshold);
         }
+
         private void print() {
 
             try {
@@ -267,9 +288,9 @@ public class PdfGenerator {
                         document.finishPage(page);
 
                         /*Finally invalidate it and request layout for restore the previous state
-                        * of the view as like as the xml. Otherwise for generating PDF by view id,
-                        * the main view is being messed up because this a view is not cloneable and
-                        * being modified in the above view related tasks for printing PDF. */
+                         * of the view as like as the xml. Otherwise for generating PDF by view id,
+                         * the main view is being messed up because this a view is not cloneable and
+                         * being modified in the above view related tasks for printing PDF. */
                         content.invalidate();
                         content.requestLayout();
 
@@ -349,7 +370,7 @@ public class PdfGenerator {
                         context.getExternalFilesDir(null).getAbsolutePath() : "";
 
                 if (TextUtils.isEmpty(directoryPath))
-                postLog("context.getExternalFilesDir().getAbsolutePath() is returning null.");
+                    postLog("context.getExternalFilesDir().getAbsolutePath() is returning null.");
 
             } else {
                 postLog("Your external storage is unmounted");
@@ -413,13 +434,13 @@ public class PdfGenerator {
 
 
         @Override
-        public PageSizeStep fromView(View... viewArrays) {
+        public FileNameStep fromView(View... viewArrays) {
             viewList = new ArrayList<>(Arrays.asList(viewArrays));
             return this;
         }
 
         @Override
-        public PageSizeStep fromViewList(List<View> viewList) {
+        public FileNameStep fromViewList(List<View> viewList) {
             this.viewList = viewList;
             return this;
         }
@@ -458,26 +479,26 @@ public class PdfGenerator {
 
 
         @Override
-        public PageSizeStep fromViewID(@LayoutRes Integer relatedParentLayoutID, Activity activity, @IdRes Integer... xmlResourceList) {
+        public FileNameStep fromViewID(@LayoutRes Integer relatedParentLayoutID, Activity activity, @IdRes Integer... xmlResourceList) {
             viewList = Utils.getViewListFromID(activity, relatedParentLayoutID, Arrays.asList(xmlResourceList), pdfGeneratorListener);
             return this;
         }
 
         @Override
-        public PageSizeStep fromViewIDList(@LayoutRes Integer relatedParentLayout, Activity activity, List<Integer> viewIDList) {
+        public FileNameStep fromViewIDList(@LayoutRes Integer relatedParentLayout, Activity activity, List<Integer> viewIDList) {
             viewList = Utils.getViewListFromID(activity, relatedParentLayout, viewIDList, pdfGeneratorListener);
             return this;
         }
 
 
         @Override
-        public PageSizeStep fromLayoutXML(@LayoutRes Integer... layouts) {
+        public FileNameStep fromLayoutXML(@LayoutRes Integer... layouts) {
             viewList = Utils.getViewListFromLayout(context, pdfGeneratorListener, Arrays.asList(layouts));
             return this;
         }
 
         @Override
-        public PageSizeStep fromLayoutXMLList(@LayoutRes List<Integer> layoutXMLList) {
+        public FileNameStep fromLayoutXMLList(@LayoutRes List<Integer> layoutXMLList) {
             viewList = Utils.getViewListFromLayout(context, pdfGeneratorListener, layoutXMLList);
             return this;
         }

@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application android:requestLegacyExternalStorage="true">
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name=".model.XmlToPDFFileProvider"
             android:authorities="${applicationId}.xmlToPdf.provider"
             android:exported="false"
             android:grantUriPermissions="true">
