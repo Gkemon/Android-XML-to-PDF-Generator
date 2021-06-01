@@ -75,7 +75,7 @@ allprojects {
 **Step 2**. Add the dependency
 ```
 dependencies {
-        implementation 'com.github.Gkemon:XML-to-PDF-generator:2.4'
+        implementation 'com.github.Gkemon:XML-to-PDF-generator:2.5'
 }
 ```	
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#getting-started-quick)
@@ -101,8 +101,6 @@ You can generate <b>PDF</b> from many sources.
                         .fromLayoutXML(R.layout.layout_print,R.layout.layout_print)
 			/* "fromLayoutXML()" takes array of layout resources.
 			 * You can also invoke "fromLayoutXMLList()" method here which takes list of layout resources instead of array. */
-                        .setPageSize(PdfGenerator.PageSize.A4)
-			/* It takes default page size like A4,A5,WRAP_CONTENT.*/
                         .setFileName("Test-PDF")
 			/* It is file name */
                         .setFolderName("FolderA/FolderB/FolderC")
@@ -153,7 +151,6 @@ You can generate <b>PDF</b> from many sources.
                         .fromViewID(R.layout.hostLayout,activity,R.id.tv_print_area,R.id.tv_print_area)
 			/* "fromViewID()" takes array of view ids and the host layout xml where the view ids are belonging.
 			 * You can also invoke "fromViewIDList()" method here which takes list of view ids instead of array.*/
-                        .setPageSize(PdfGenerator.PageSize.A4)
                         .setFileName("Test-PDF")
                         .setFolderName("Test-PDF-folder")
                         .openPDFafterGeneration(true)
@@ -193,7 +190,6 @@ PdfGenerator.getBuilder()
                         .setContext(MainActivity.this)
                         .fromViewSource()
                         .fromView(view)
-			.setPageSize(PdfGenerator.PageSize.A4)
                         .setFileName("Test-PDF")
                         .setFolderName("Test-PDF-folder")
                         .openPDFafterGeneration(true)
