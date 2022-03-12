@@ -103,7 +103,6 @@ public class DemoInvoiceFragment extends Fragment {
                 .fromView(finalInvoiceViewToPrint)
                 /* "fromLayoutXML()" takes array of layout resources.
                  * You can also invoke "fromLayoutXMLList()" method here which takes list of layout resources instead of array. */
-                .setPageSize(PdfGenerator.PageSize.A4)
                 /* It takes default page size like A4,A5. You can also set custom page size in pixel
                  * by calling ".setCustomPageSize(int widthInPX, int heightInPX)" here. */
                 .setFileName("demo-invoice")
