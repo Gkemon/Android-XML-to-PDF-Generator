@@ -50,7 +50,7 @@ public class PdfGenerator {
     public static int a4HeightInPostScript = (int) (a4HeightInPX * postScriptThreshold);
     public static int a4WidthInPostScript = (int) (a4WidthInPX * postScriptThreshold);
 
-    public static int WRAP_CONTENT_WIDTH = 0, WRAP_CONTENT_HEIGHT = 0;
+    public static int AS_LIKE_XML_WIDTH = 0, AS_LIKE_XML_HEIGHT = 0;
 
     public static ContextStep getBuilder() {
         return new Builder();
@@ -59,6 +59,7 @@ public class PdfGenerator {
     public enum PageSize {
         /**
          * For standard A4 size page
+         *
          * @deprecated For printing well-formed ISO standard sized papers(like-A4,A5 sized pdf,you
          * don't need to be concerned about width and height.Please set width and height to the xml
          * with an aspect ratio 1:√2. For example if your xml width is 100 dp then the height of the
@@ -71,6 +72,7 @@ public class PdfGenerator {
 
         /**
          * For standard A5 size page
+         *
          * @deprecated For printing well-formed ISO standard sized papers(like-A4,A5 sized pdf,you
          * don't need to be concerned about width and height.Please set width and height to the xml
          * with an aspect ratio 1:√2. For example if your xml width is 100 dp then the height of the
@@ -83,7 +85,7 @@ public class PdfGenerator {
         /**
          * For print the page as much as they are big.
          */
-        WRAP_CONTENT
+        AS_LIKE_XML
     }
 
 
@@ -102,11 +104,13 @@ public class PdfGenerator {
 
     public interface ViewSourceIntakeStep {
         FileNameStep fromView(View... viewList);
+
         FileNameStep fromViewList(List<View> viewList);
     }
 
     public interface LayoutXMLSourceIntakeStep {
         FileNameStep fromLayoutXML(@LayoutRes Integer... layoutXMLs);
+
         FileNameStep fromLayoutXMLList(@LayoutRes List<Integer> layoutXMLList);
     }
 
@@ -117,8 +121,13 @@ public class PdfGenerator {
          * @param xmlResourceList       The view ids which will be printed.
          * @return
          */
-        FileNameStep fromViewID(@LayoutRes Integer relatedParentLayoutID, Activity activity, @IdRes Integer... xmlResourceList);
-        FileNameStep fromViewIDList(@LayoutRes Integer relatedParentLayoutID, Activity activity, @IdRes List<Integer> xmlResourceList);
+        FileNameStep fromViewID(@LayoutRes Integer relatedParentLayoutID,
+                                Activity activity,
+                                @IdRes Integer... xmlResourceList);
+
+        FileNameStep fromViewIDList(@LayoutRes Integer relatedParentLayoutID,
+                                    Activity activity,
+                                    @IdRes List<Integer> xmlResourceList);
 
 
     }
@@ -138,7 +147,7 @@ public class PdfGenerator {
 
         Build setFolderName(String folderName);
 
-        Build openPDFafterGeneration(boolean open);
+        Build openPDAfterGeneration(boolean open);
 
     }
 
@@ -146,10 +155,9 @@ public class PdfGenerator {
     public static class Builder implements Build, FileNameStep, PageSizeStep
             , LayoutXMLSourceIntakeStep, ViewSourceIntakeStep, ViewIDSourceIntakeStep
             , FromSourceStep, ContextStep {
-
-        private static int NO_XML_SELECTED_YET = -1;
-        private int pageWidthInPixel = WRAP_CONTENT_WIDTH;
-        private int pageHeightInPixel = WRAP_CONTENT_HEIGHT;
+        private static final int NO_XML_SELECTED_YET = -1;
+        private int pageWidthInPixel = AS_LIKE_XML_WIDTH;
+        private int pageHeightInPixel = AS_LIKE_XML_HEIGHT;
         private Context context;
         private PageSize pageSize;
         private PdfGeneratorListener pdfGeneratorListener;
@@ -226,22 +234,8 @@ public class PdfGenerator {
          * We should reset the value of the page otherwise page size might be differ for each page
          */
         private void resetValue() {
-            if (pageSize != null) {
-                if (pageSize == PageSize.A4) {
-                    pageHeightInPixel = a4HeightInPX;
-                    pageWidthInPixel = a4WidthInPX;
-                } else if (pageSize == PageSize.A5) {
-                    pageHeightInPixel = a5HeightInPX;
-                    pageWidthInPixel = a5WidthInPX;
-                } else if (pageSize == PageSize.WRAP_CONTENT) {
-                    pageWidthInPixel = WRAP_CONTENT_WIDTH;
-                    pageHeightInPixel = WRAP_CONTENT_HEIGHT;
-                }
-            } else {
-                /*postLog("Page size is not found. Your custom page width is " +
-                        pageWidthInPixel + " and custom page height is " + pageHeightInPixel);*/
-            }
-
+            pageWidthInPixel = AS_LIKE_XML_WIDTH;
+            pageHeightInPixel = AS_LIKE_XML_HEIGHT;
             postScriptThreshold = 0.75;
             a4HeightInPostScript = (int) (a4HeightInPX * postScriptThreshold);
         }
@@ -256,15 +250,21 @@ public class PdfGenerator {
                     for (int i = 0; i < viewList.size(); i++) {
                         resetValue();
                         View content = viewList.get(i);
-                        if (pageWidthInPixel == WRAP_CONTENT_WIDTH && pageHeightInPixel == WRAP_CONTENT_HEIGHT) {
+                        if (pageWidthInPixel == AS_LIKE_XML_WIDTH &&
+                                pageHeightInPixel == AS_LIKE_XML_HEIGHT) {
+                            pageHeightInPixel = content.getHeight();
+                            pageWidthInPixel = content.getWidth();
 
-                            content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                            pageHeightInPixel = content.getMeasuredHeight();
-                            pageWidthInPixel = content.getMeasuredWidth();
+                            if(pageHeightInPixel==0&&pageWidthInPixel==0){
+                                //If view was inflated from XML then getHeight() and getWidth()
+                                //So we need to then make it measured.
+                                content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                                pageHeightInPixel = content.getMeasuredHeight();
+                                pageWidthInPixel = content.getMeasuredWidth();
+                            }
 
                             postScriptThreshold = 1.0;
                             a4HeightInPostScript = pageHeightInPixel;
-
                         }
 
 
@@ -306,11 +306,7 @@ public class PdfGenerator {
                         postFailure("Cannot find the storage path to create the pdf file.");
                         return;
                     }
-
-
                     directoryPath = directoryPath + "/" + folderName + "/";
-
-
                     File file = new File(directoryPath);
                     if (!file.exists()) {
                         if (!file.mkdirs()) {
@@ -447,7 +443,7 @@ public class PdfGenerator {
 
 
         @Override
-        public Build openPDFafterGeneration(boolean openPdfFile) {
+        public Build openPDAfterGeneration(boolean openPdfFile) {
             this.openPdfFile = openPdfFile;
             return this;
         }

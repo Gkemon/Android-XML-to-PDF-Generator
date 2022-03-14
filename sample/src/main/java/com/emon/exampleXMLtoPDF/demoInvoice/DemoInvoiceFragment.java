@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,23 +30,16 @@ import java.util.Calendar;
 public class DemoInvoiceFragment extends Fragment {
 
     private static final String TAG = "InvoiceFragment";
-    private RecyclerView invoice_rv;
-    private Button generate_invoice_btn;
     //invoice views edit items
     TextView customer_shop_name_tv, customer_address_tv, customer_phone_tv,
             customer_order_date_tv, our_delivery_date_tv;
 
     private View finalInvoiceViewToPrint;
+    private View root;
 
     public DemoInvoiceFragment() {
     }
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     /** IMPORTANT:: We just need to print a invoice_layout LinearLayout,Not the whole RelativeLayout
      * So we need to make a view something like "finalInvoiceViewToPrint" which will be print out ignoring
@@ -60,14 +52,14 @@ public class DemoInvoiceFragment extends Fragment {
      */
     private View createInvoiceViewFromRootView(View root) {
 
-        View finalInvoiceViewToPrint = root.findViewById(R.id.invoice_layout);
-        invoice_rv = finalInvoiceViewToPrint.findViewById(R.id.invoice_rv);
+        finalInvoiceViewToPrint = root.findViewById(R.id.invoice_layout);
+        RecyclerView invoice_rv = finalInvoiceViewToPrint.findViewById(R.id.invoice_rv);
         customer_shop_name_tv = finalInvoiceViewToPrint.findViewById(R.id.customer_shop_name_tv);
         customer_address_tv = finalInvoiceViewToPrint.findViewById(R.id.customer_address_tv);
         customer_phone_tv = finalInvoiceViewToPrint.findViewById(R.id.customer_phone_tv);
         customer_order_date_tv = finalInvoiceViewToPrint.findViewById(R.id.customer_order_date_tv);
         our_delivery_date_tv = finalInvoiceViewToPrint.findViewById(R.id.our_delivery_date_tv);
-        customer_shop_name_tv.setText("Name: " + "Demo shop name");
+        customer_shop_name_tv.setText("Name: Demo shop name");
         customer_address_tv.setText("Address: " + "Demo shop address");
         customer_phone_tv.setText("Cell No: " + "1234567");
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
@@ -85,8 +77,8 @@ public class DemoInvoiceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_demo_invoice, container, false);
-        generate_invoice_btn = root.findViewById(R.id.generate_invoice_btn);
+        root = inflater.inflate(R.layout.fragment_demo_invoice, container, false);
+        Button generate_invoice_btn = root.findViewById(R.id.generate_invoice_btn);
 
         finalInvoiceViewToPrint = createInvoiceViewFromRootView(root);
 
@@ -96,7 +88,6 @@ public class DemoInvoiceFragment extends Fragment {
     }
 
     public void generatePdf() {
-
         PdfGenerator.getBuilder()
                 .setContext(getContext())
                 .fromViewSource()
@@ -111,7 +102,7 @@ public class DemoInvoiceFragment extends Fragment {
                 /* It is folder name. If you set the folder name like this pattern (FolderA/FolderB/FolderC), then
                  * FolderA creates first.Then FolderB inside FolderB and also FolderC inside the FolderB and finally
                  * the pdf file named "Test-PDF.pdf" will be store inside the FolderB. */
-                .openPDFafterGeneration(true)
+                .openPDAfterGeneration(true)
                 /* It true then the generated pdf will be shown after generated. */
                 .build(new PdfGeneratorListener() {
                     @Override

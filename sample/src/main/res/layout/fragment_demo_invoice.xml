@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="@dimen/_315sdp"
+    android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:orientation="vertical">
 
@@ -16,12 +16,13 @@
 
         <!-- Our Store Name-->
         <TextView
+            android:textStyle="bold"
+            android:textSize="@dimen/_10ssp"
             android:layout_gravity="center"
             android:id="@+id/shop_name_invoice_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            tools:text="Demo shop name" />
+            android:text="Demo shop name" />
 
         <!--Our Address-->
 
@@ -33,6 +34,7 @@
             android:layout_below="@+id/shop_name_invoice_tv">
 
             <TextView
+                android:textSize="@dimen/_8ssp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -41,14 +43,13 @@
                 android:text="INVOICE" />
 
             <TextView
-                
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp"
                 android:text="Customer Copy"
-                android:textSize="24sp" />
+                android:textSize="@dimen/_10ssp" />
             <!--android level 9 or higher
             android:textSize="14sp"-->
         </RelativeLayout>
@@ -74,24 +75,21 @@
                 <TextView
                     android:id="@+id/customer_shop_name_tv"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     tools:text="Demo shop name" />
 
                 <TextView
                     android:id="@+id/customer_address_tv"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:layout_weight="1"
-                    tools:text="Demo customer address"/>
+                    tools:text="Demo customer address: "/>
 
                 <TextView
                     android:id="@+id/customer_phone_tv"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:layout_weight="1"
                     tools:text="Demo phone no:" />
 
             </LinearLayout>
@@ -107,16 +105,14 @@
                 <TextView
                     android:id="@+id/customer_order_date_tv"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:gravity="end"/>
 
                 <TextView
                     android:id="@+id/our_delivery_date_tv"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:layout_weight="1"
                     android:gravity="end" />
 
             </LinearLayout>

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/etiqueta"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350px"
     android:layout_height="280px"
     android:padding="1dp"
-    android:paddingStart="30px">
+    android:paddingStart="30px"
+    tools:ignore="PxUsage">
 
     <TextView
         android:id="@+id/codTopo"

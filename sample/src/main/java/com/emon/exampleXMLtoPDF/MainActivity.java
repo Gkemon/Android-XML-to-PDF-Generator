@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                         .fromView(content,content,content)
                         .setFileName("TestPDF")
                         .setFolderName("Test-PDF-folder")
-                        .openPDFafterGeneration(true)
+                        .openPDAfterGeneration(true)
                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
