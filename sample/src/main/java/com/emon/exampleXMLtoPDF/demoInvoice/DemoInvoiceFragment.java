@@ -2,10 +2,12 @@ package com.emon.exampleXMLtoPDF.demoInvoice;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +28,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-
 public class DemoInvoiceFragment extends Fragment {
 
     private static final String TAG = "InvoiceFragment";
@@ -35,15 +36,16 @@ public class DemoInvoiceFragment extends Fragment {
             customer_order_date_tv, our_delivery_date_tv;
 
     private View finalInvoiceViewToPrint;
-    private View root;
 
     public DemoInvoiceFragment() {
     }
 
 
-    /** IMPORTANT:: We just need to print a invoice_layout LinearLayout,Not the whole RelativeLayout
+    /**
+     * IMPORTANT:: We just need to print a invoice_layout LinearLayout,Not the whole RelativeLayout
      * So we need to make a view something like "finalInvoiceViewToPrint" which will be print out ignoring
      * the rest part of the root layout.
+     *
      * @param root the main view group which is holding the invoice layout. We need to make a
      *             final invoice view from it (View root) which will be print out ignoring the rest part.
      * @return the final invoice view generating from the root view ignoring rest part
@@ -59,14 +61,14 @@ public class DemoInvoiceFragment extends Fragment {
         customer_phone_tv = finalInvoiceViewToPrint.findViewById(R.id.customer_phone_tv);
         customer_order_date_tv = finalInvoiceViewToPrint.findViewById(R.id.customer_order_date_tv);
         our_delivery_date_tv = finalInvoiceViewToPrint.findViewById(R.id.our_delivery_date_tv);
-        customer_shop_name_tv.setText("Name: Demo shop name");
-        customer_address_tv.setText("Address: " + "Demo shop address");
-        customer_phone_tv.setText("Cell No: " + "1234567");
+        customer_shop_name_tv.setText(Html.fromHtml("<b>Name:</b> Demo shop name"));
+        customer_address_tv.setText(Html.fromHtml("<b>Address:</b> " + "Demo shop address"));
+        customer_phone_tv.setText(Html.fromHtml("<b>Cell No:</b> " + "1234567"));
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         final String orderDate = format.format(1617976800);
         final String deliveryDate = format.format(Calendar.getInstance().getTime());
-        customer_order_date_tv.setText("Order Date: " + orderDate);
-        our_delivery_date_tv.setText("Delivery Date: " + deliveryDate);
+        customer_order_date_tv.setText(Html.fromHtml("<b>Order Date:</b> " + orderDate));
+        our_delivery_date_tv.setText(Html.fromHtml("<b>Delivery Date:</b> " + deliveryDate));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         invoice_rv.setLayoutManager(layoutManager);
         invoice_rv.setAdapter(new DummyItemRecyclerViewAdapter(DummyContent.ITEMS));
@@ -77,13 +79,12 @@ public class DemoInvoiceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_demo_invoice, container, false);
+        View root = inflater.inflate(R.layout.fragment_demo_invoice, container, false);
         Button generate_invoice_btn = root.findViewById(R.id.generate_invoice_btn);
 
         finalInvoiceViewToPrint = createInvoiceViewFromRootView(root);
 
         generate_invoice_btn.setOnClickListener(v -> generatePdf());
-
         return root;
     }
 
@@ -98,7 +99,7 @@ public class DemoInvoiceFragment extends Fragment {
                  * by calling ".setCustomPageSize(int widthInPX, int heightInPX)" here. */
                 .setFileName("demo-invoice")
                 /* It is file name */
-                .setFolderName("demo-invoice-folder/")
+                .setFolderNameOrPath("demo-invoice-folder/")
                 /* It is folder name. If you set the folder name like this pattern (FolderA/FolderB/FolderC), then
                  * FolderA creates first.Then FolderB inside FolderB and also FolderC inside the FolderB and finally
                  * the pdf file named "Test-PDF.pdf" will be store inside the FolderB. */

@@ -1,5 +1,6 @@
 package com.emon.exampleXMLtoPDF.dummyList;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -16,7 +17,8 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class DummyItemRecyclerViewAdapter extends RecyclerView.Adapter<DummyItemRecyclerViewAdapter.ViewHolder> {
+public class DummyItemRecyclerViewAdapter extends
+        RecyclerView.Adapter<DummyItemRecyclerViewAdapter.ViewHolder> {
 
     private final List<DummyItem> mValues;
 
@@ -24,8 +26,14 @@ public class DummyItemRecyclerViewAdapter extends RecyclerView.Adapter<DummyItem
         mValues = items;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        /**
+         * MUST NEED TO set android:layout_width A FIXED
+         * VALUE INSTEAD OF "wrap_content" and "match_parent" OTHERWISE SIZING COULD BE MALFORMED
+         * IN PDF FOR DIFFERENT DEVICE SCREEN
+         */
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_item, parent, false);
         return new ViewHolder(view);
@@ -43,7 +51,7 @@ public class DummyItemRecyclerViewAdapter extends RecyclerView.Adapter<DummyItem
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
@@ -56,6 +64,7 @@ public class DummyItemRecyclerViewAdapter extends RecyclerView.Adapter<DummyItem
             mContentView = (TextView) view.findViewById(R.id.content);
         }
 
+        @NonNull
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";

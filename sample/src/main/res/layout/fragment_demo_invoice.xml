@@ -13,7 +13,6 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/generate_invoice_btn"
         android:padding="48dp">
-
         <!-- Our Store Name-->
         <TextView
             android:textStyle="bold"
@@ -66,6 +65,7 @@
 
             <!--demoUser information-->
             <LinearLayout
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -106,14 +106,14 @@
                     android:id="@+id/customer_order_date_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="end"/>
+                    android:gravity="start"/>
 
                 <TextView
                     android:id="@+id/our_delivery_date_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:gravity="end" />
+                    android:gravity="start" />
 
             </LinearLayout>
 

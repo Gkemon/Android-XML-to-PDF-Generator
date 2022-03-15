@@ -15,6 +15,7 @@ import android.view.View;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
@@ -103,8 +104,17 @@ public class PdfGenerator {
 
 
     public interface ViewSourceIntakeStep {
+        /**
+         * @param viewList  MUST NEED TO set android:layout_width A FIXED
+         * VALUE INSTEAD OF "wrap_content" and "match_parent" OTHERWISE SIZING COULD BE MALFORMED
+         * IN PDF FOR DIFFERENT DEVICE SCREEN
+         */
         FileNameStep fromView(View... viewList);
-
+        /**
+         * @param viewList  MUST NEED TO set android:layout_width A FIXED
+         * VALUE INSTEAD OF "wrap_content" and "match_parent" OTHERWISE SIZING COULD BE MALFORMED
+         * IN PDF FOR DIFFERENT DEVICE SCREEN
+         */
         FileNameStep fromViewList(List<View> viewList);
     }
 
@@ -116,27 +126,19 @@ public class PdfGenerator {
 
     public interface ViewIDSourceIntakeStep {
         /**
-         * @param activity              Host activity.
-         * @param relatedParentLayoutID The layout id of parent xml where the view ids are belonging (e.g- R.layout.my_layout).
-         * @param xmlResourceList       The view ids which will be printed.
-         * @return
+         * @param containingActivity Host activity where all views reside.
+         * @param xmlResourceList    The view ids which will be printed.
          */
-        FileNameStep fromViewID(@LayoutRes Integer relatedParentLayoutID,
-                                Activity activity,
+        FileNameStep fromViewID(@NonNull Activity containingActivity,
                                 @IdRes Integer... xmlResourceList);
 
-        FileNameStep fromViewIDList(@LayoutRes Integer relatedParentLayoutID,
-                                    Activity activity,
+        FileNameStep fromViewIDList(@NonNull Activity containingActivity,
                                     @IdRes List<Integer> xmlResourceList);
-
-
     }
-
 
     public interface PageSizeStep {
         FileNameStep setPageSize(PageSize pageSize);
     }
-
 
     public interface FileNameStep {
         Build setFileName(String fileName);
@@ -145,7 +147,7 @@ public class PdfGenerator {
     public interface Build {
         void build(PdfGeneratorListener pdfGeneratorListener);
 
-        Build setFolderName(String folderName);
+        Build setFolderNameOrPath(String folderName);
 
         Build openPDAfterGeneration(boolean open);
 
@@ -159,7 +161,6 @@ public class PdfGenerator {
         private int pageWidthInPixel = AS_LIKE_XML_WIDTH;
         private int pageHeightInPixel = AS_LIKE_XML_HEIGHT;
         private Context context;
-        private PageSize pageSize;
         private PdfGeneratorListener pdfGeneratorListener;
         private List<View> viewList = new ArrayList<>();
         private String fileName;
@@ -255,10 +256,14 @@ public class PdfGenerator {
                             pageHeightInPixel = content.getHeight();
                             pageWidthInPixel = content.getWidth();
 
-                            if(pageHeightInPixel==0&&pageWidthInPixel==0){
+                            if (pageHeightInPixel == 0 && pageWidthInPixel == 0) {
                                 //If view was inflated from XML then getHeight() and getWidth()
                                 //So we need to then make it measured.
-                                content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                                if (content.getMeasuredWidth() == 0 && content.getMeasuredHeight() == 0) {
+                                    /*content.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);*/
+                                    content.measure(View.MeasureSpec.makeMeasureSpec(pageWidthInPixel, View.MeasureSpec.UNSPECIFIED),
+                                            View.MeasureSpec.makeMeasureSpec(pageHeightInPixel, View.MeasureSpec.UNSPECIFIED));
+                                }
                                 pageHeightInPixel = content.getMeasuredHeight();
                                 pageWidthInPixel = content.getMeasuredWidth();
                             }
@@ -431,13 +436,15 @@ public class PdfGenerator {
 
         @Override
         public FileNameStep fromView(View... viewArrays) {
-            viewList = new ArrayList<>(Arrays.asList(viewArrays));
+            this.viewList = Utils.getViewListMeasuringRoot(
+                    new ArrayList<>(Arrays.asList(viewArrays)),
+                    pdfGeneratorListener);
             return this;
         }
 
         @Override
         public FileNameStep fromViewList(List<View> viewList) {
-            this.viewList = viewList;
+            this.viewList = Utils.getViewListMeasuringRoot(viewList, pdfGeneratorListener);
             return this;
         }
 
@@ -457,12 +464,11 @@ public class PdfGenerator {
 
         @Override
         public FileNameStep setPageSize(PageSize pageSize) {
-            this.pageSize = pageSize;
             return this;
         }
 
         @Override
-        public Build setFolderName(String folderName) {
+        public Build setFolderNameOrPath(String folderName) {
             this.folderName = folderName;
             return this;
         }
@@ -475,27 +481,27 @@ public class PdfGenerator {
 
 
         @Override
-        public FileNameStep fromViewID(@LayoutRes Integer relatedParentLayoutID, Activity activity, @IdRes Integer... xmlResourceList) {
-            viewList = Utils.getViewListFromID(activity, relatedParentLayoutID, Arrays.asList(xmlResourceList), pdfGeneratorListener);
+        public FileNameStep fromViewID(@NonNull Activity activity, @IdRes Integer... xmlResourceList) {
+            this.viewList = Utils.getViewListFromID(activity, Arrays.asList(xmlResourceList), pdfGeneratorListener);
             return this;
         }
 
         @Override
-        public FileNameStep fromViewIDList(@LayoutRes Integer relatedParentLayout, Activity activity, List<Integer> viewIDList) {
-            viewList = Utils.getViewListFromID(activity, relatedParentLayout, viewIDList, pdfGeneratorListener);
+        public FileNameStep fromViewIDList(@NonNull Activity activity, List<Integer> viewIDList) {
+            this.viewList = Utils.getViewListFromID(activity, viewIDList, pdfGeneratorListener);
             return this;
         }
 
 
         @Override
         public FileNameStep fromLayoutXML(@LayoutRes Integer... layouts) {
-            viewList = Utils.getViewListFromLayout(context, pdfGeneratorListener, Arrays.asList(layouts));
+            this.viewList = Utils.getViewListFromLayout(context, pdfGeneratorListener, Arrays.asList(layouts));
             return this;
         }
 
         @Override
         public FileNameStep fromLayoutXMLList(@LayoutRes List<Integer> layoutXMLList) {
-            viewList = Utils.getViewListFromLayout(context, pdfGeneratorListener, layoutXMLList);
+            this.viewList = Utils.getViewListFromLayout(context, pdfGeneratorListener, layoutXMLList);
             return this;
         }
 

@@ -10,7 +10,8 @@
         android:hardwareAccelerated="false"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.emon.exampleXMLtoPDF.MainActivity">
+        <activity android:name="com.emon.exampleXMLtoPDF.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

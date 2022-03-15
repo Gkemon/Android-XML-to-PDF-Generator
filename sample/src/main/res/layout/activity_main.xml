@@ -1,46 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/main"
-    tools:context="com.emon.exampleXMLtoPDF.MainActivity"
-    android:orientation="vertical">
+    android:layout_width="@dimen/_300sdp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center|top">
 
-    <TextView
-        android:textSize="20sp"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:background="@android:color/holo_purple"
-        android:layout_gravity="center"
-        android:id="@+id/tv_print_area"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:layout_width="400dp"
-        android:layout_height="500dp"
-        android:text="Hi, Im am a dummy XML" />
-    <Button
-        android:id="@+id/bt_print"
-        android:text="Print me"
-        android:textAllCaps="false"
-        android:layout_margin="20dp"
-        android:backgroundTint="@android:color/holo_red_light"
-        android:textColor="@android:color/white"
-        android:layout_gravity="center|bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </Button>
-    <Button
-        android:id="@+id/bt_invoice"
-        android:text="Print demo invoice me"
-        android:textAllCaps="false"
-        android:layout_margin="20dp"
-        android:backgroundTint="@android:color/holo_red_light"
-        android:textColor="@android:color/white"
-        android:layout_gravity="center|bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </Button>
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context="com.emon.exampleXMLtoPDF.MainActivity">
 
-</LinearLayout>
+        <TextView
+            android:layout_margin="@dimen/_5sdp"
+            android:id="@+id/tv_print_area"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_200sdp"
+            android:layout_gravity="top"
+            android:background="@android:color/holo_purple"
+            android:gravity="top|center"
+            android:text="Hi, Im am a dummy text"
+            android:textAlignment="gravity"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/bt_print"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Print The Top Demo View"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
+        <Button
+            android:id="@+id/bt_print_multi_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Print The Top Demo View In Multi Page"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
+        <Button
+            android:id="@+id/bt_print_multi_page_dynamic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Print The Top Demo View In Multi Page With Dynamic Text"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/bt_demo_barcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Print A Demo Barcode"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/bt_print_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Print A Demo List"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/bt_invoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Print A Demo Invoice"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+</ScrollView>
