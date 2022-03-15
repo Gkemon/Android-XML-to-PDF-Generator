@@ -87,7 +87,7 @@ dependencies {
 You can generate <b>PDF</b> from many sources.
 * Layout resources (i.e: ```R.layout.myLayout```)
 * View ids (i.e: ```R.id.viewID```)
-* Java view objects (i.e ```View```,```TextView```,```LinearLayout```) because sometimes we need to change the content of the XML and then dealing this java view object is only way to do this. 
+* Java view objects (i.e ```View```,```TextView```,```LinearLayout```) because sometimes we need to change the content of the XML and then dealing this java view object is only way to do this.
 
 ### (Important noted: For better output and make the PDF more responsive,please try to set ```android:layout_width``` of the top most view of XML a fixed value instead of ```wrap_content``` and ```match_parent``` otherwise sizing could be malformed in PDF for different device screen.)
 
@@ -185,7 +185,7 @@ text view in the XML and you want to populate it with a data then try the [appro
 ```
 
 ### From views:
-( This approach is perfect when you need to change the XML content. You can change the content getting them by ```findViewById``` and change them and finally print them )
+( This approach is perfect when you need to change the XML content. You can change the content getting them by ```findViewById``` and change them and finally print them. Other example is [here](https://github.com/Gkemon/Android-XML-to-PDF-Generator/issues/4#issuecomment-712690701) )
 ```java 
 
 
