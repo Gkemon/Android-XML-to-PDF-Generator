@@ -1,8 +1,9 @@
 package com.emon.exampleXMLtoPDF.demoInvoice;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,9 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.emon.exampleXMLtoPDF.R;
 import com.emon.exampleXMLtoPDF.dummyList.DummyContent;
 import com.emon.exampleXMLtoPDF.dummyList.DummyItemRecyclerViewAdapter;
@@ -34,6 +41,7 @@ public class DemoInvoiceFragment extends Fragment {
     //invoice views edit items
     TextView customer_shop_name_tv, customer_address_tv, customer_phone_tv,
             customer_order_date_tv, our_delivery_date_tv;
+    ImageView ivLogo;
 
     private View finalInvoiceViewToPrint;
 
@@ -71,6 +79,8 @@ public class DemoInvoiceFragment extends Fragment {
         our_delivery_date_tv.setText(Html.fromHtml("<b>Delivery Date:</b> " + deliveryDate));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         invoice_rv.setLayoutManager(layoutManager);
+        ivLogo=finalInvoiceViewToPrint.findViewById(R.id.iv_logo);
+        Glide.with(this).load("https://lh6.ggpht.com/9SZhHdv4URtBzRmXpnWxZcYhkgTQurFuuQ8OR7WZ3R7fyTmha77dYkVvcuqMu3DLvMQ=w300").into(ivLogo);
         invoice_rv.setAdapter(new DummyItemRecyclerViewAdapter(DummyContent.ITEMS));
 
         return finalInvoiceViewToPrint;
@@ -84,7 +94,9 @@ public class DemoInvoiceFragment extends Fragment {
 
         finalInvoiceViewToPrint = createInvoiceViewFromRootView(root);
 
-        generate_invoice_btn.setOnClickListener(v -> generatePdf());
+        generate_invoice_btn.setOnClickListener(v -> {
+           generatePdf();
+        });
         return root;
     }
 

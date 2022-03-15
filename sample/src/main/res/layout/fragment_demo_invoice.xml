@@ -7,21 +7,28 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@+id/invoice_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/generate_invoice_btn"
+        android:orientation="vertical"
         android:padding="48dp">
         <!-- Our Store Name-->
         <TextView
-            android:textStyle="bold"
-            android:textSize="@dimen/_10ssp"
-            android:layout_gravity="center"
             android:id="@+id/shop_name_invoice_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Demo shop name" />
+            android:layout_gravity="center"
+            android:text="Demo shop name"
+            android:textSize="@dimen/_10ssp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_4sdp" />
 
         <!--Our Address-->
 
@@ -33,13 +40,13 @@
             android:layout_below="@+id/shop_name_invoice_tv">
 
             <TextView
-                android:textSize="@dimen/_8ssp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp"
-                android:text="INVOICE" />
+                android:text="INVOICE"
+                android:textSize="@dimen/_8ssp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -65,9 +72,9 @@
 
             <!--demoUser information-->
             <LinearLayout
-                android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:weightSum="3">
@@ -83,7 +90,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    tools:text="Demo customer address: "/>
+                    tools:text="Demo customer address: " />
 
                 <TextView
                     android:id="@+id/customer_phone_tv"
@@ -106,7 +113,7 @@
                     android:id="@+id/customer_order_date_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"/>
+                    android:gravity="start" />
 
                 <TextView
                     android:id="@+id/our_delivery_date_tv"
@@ -134,8 +141,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:gravity="bottom"
             android:layout_marginTop="48dp"
+            android:gravity="bottom"
             android:orientation="horizontal"
             android:weightSum="3">
 
@@ -163,12 +170,12 @@
     </LinearLayout>
 
     <Button
-        android:layout_marginTop="@dimen/_10sdp"
         android:id="@+id/generate_invoice_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_10sdp"
         android:text="Generate Invoice" />
 
 </RelativeLayout>
