@@ -91,7 +91,9 @@ You can generate <b>PDF</b> from many sources.
 
 
 
-### From layout resources :
+### From layout resources : 
+( Only static content in XML will be printed by this approach. If you want to change the content of the XML ,suppose there is a
+text view in the XML and you want to populate it with a data then try the [approach](https://github.com/Gkemon/Android-XML-to-PDF-Generator/edit/master/README.md#from-views) ) 
 
 
 ```java
@@ -183,8 +185,14 @@ You can generate <b>PDF</b> from many sources.
 ```
 
 ### From views:
-
+( This approach is perfect when you need to change the XML content. You can change the content getting them by ```findViewById``` and change them and finally print them )
 ```java 
+
+
+TextView tvText = view.findViewByID(R.id.tv_text_1);
+tvText.setText("My changed content");
+//By the following statements, we are changing the text view inside of our target "view" which is going to be changed.
+//So if we now print the "view" then you will see the changed text in the pdf.
 
 PdfGenerator.getBuilder()
                         .setContext(MainActivity.this)
