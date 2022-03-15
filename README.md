@@ -89,7 +89,7 @@ You can generate <b>PDF</b> from many sources.
 * View ids (i.e: ```R.id.viewID```)
 * Java view objects (i.e ```View```,```TextView```,```LinearLayout```) because sometimes we need to change the content of the XML and then dealing this java view object is only way to do this. 
 
-
+### (Important noted: For better output and make the PDF more responsive,please try to set ```android:layout_width``` of the top most view of XML a fixed value instead of ```wrap_content``` and ```match_parent``` otherwise sizing could be malformed in PDF for different device screen.)
 
 ### From layout resources : 
 ( Only static content in XML will be printed by this approach. If you want to change the content of the XML ,suppose there is a
