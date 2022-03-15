@@ -80,7 +80,7 @@ public class DemoInvoiceFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
         invoice_rv.setLayoutManager(layoutManager);
         ivLogo=finalInvoiceViewToPrint.findViewById(R.id.iv_logo);
-        Glide.with(this).load("https://lh6.ggpht.com/9SZhHdv4URtBzRmXpnWxZcYhkgTQurFuuQ8OR7WZ3R7fyTmha77dYkVvcuqMu3DLvMQ=w300").into(ivLogo);
+        Glide.with(this).load("https://lh6.ggpht.com/9SZhHdv4URtBzRmXpnWxZcYhkgTQurFuuQ8OR7WZ3R7fyTmha77dYkVvcuqMu3DLvMQ=w30").into(ivLogo);
         invoice_rv.setAdapter(new DummyItemRecyclerViewAdapter(DummyContent.ITEMS));
 
         return finalInvoiceViewToPrint;
