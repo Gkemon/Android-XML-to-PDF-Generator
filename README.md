@@ -87,7 +87,7 @@ dependencies {
 You can generate <b>PDF</b> from many sources.
 * Layout resources (i.e: ```R.layout.myLayout```)
 * View ids (i.e: ```R.id.viewID```)
-* Java view objects (i.e ```View```,```TextView```,```LinearLayout```)
+* Java view objects (i.e ```View```,```TextView```,```LinearLayout```) because sometimes we need to change the content of the XML and then dealing this java view object is only way to do this. 
 
 
 
@@ -254,7 +254,7 @@ Sometimes people gets stuck to print invoice or report via this library.So I wro
 With a method calling named `openPDFafterGeneration(true)`, the generated file will be automatically opened automatically.So you <b>DON'T NEED TO BE BOTHER FOR IT</b>. [FileProvider](https://developer.android.com/reference/androidx/core/content/FileProvider) is used to open file here. To get a good insight about it please see the [tutorial](https://vladsonkin.com/how-to-share-files-with-android-fileprovider/). The `android:authorities` name in the app is `${applicationId}.xmlToPdf.provider` which might be needed if you want to deal with generated file <b>CUSTOMLY</b>,not letting the app open the generated file. you will get the generated file path in `onSuccess(SuccessResponse response)` response.
 
 ### Troubleshoot
-* For WRAP_CONTENT page size, try to avoid to provide `match_parent` and `wrap_content` height/width in XML. So it specifically. 
+* Try to avoid to provide `match_parent` and `wrap_content` height/width in XML. So it specifically. 
 * If any of your footer view is not placed the footer position then you need adjust it using `marginTop` and keep it in a `ScrollView`.For example this [issue](https://github.com/Gkemon/Android-XML-to-PDF-Generator/issues/16) is fixed by rearranging XML like [this](https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/master/sample/src/main/res/layout/layout_test_invoice.xml)
 
 So if you find any trouble,then you are also welcomed again to knock me.Thank you so much. 
