@@ -247,7 +247,7 @@ If you want create multi-paged pdf from xmls-
 `.fromViewID(view1,view1)`
 
 ### How to print an Invoice Or Report ? 
-Sometimes people gets stuck to print invoice or report via this library.So I wrote an example invoice/report printing fragment to visualise how to print an <b>Invoice</b> or <b>Report</b>. Here is [the link also with an important documentation](https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/608b873e9f21ed1dbf345a191337a5a548fd3517/sample/src/main/java/com/emon/exampleXMLtoPDF/demoInvoice/DemoInvoiceFragment.java#L61) 
+Sometimes people gets stuck to print invoice or report via this library.So I wrote an example invoice/report printing fragment to visualise how to print an <b>Invoice</b> or <b>Report</b>. Here is [the link also with an important documentation](https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/master/sample/src/main/java/com/emon/exampleXMLtoPDF/demoInvoice/DemoInvoiceFragment.java) 
 
 
 ### How to deal with generated PDF? 
