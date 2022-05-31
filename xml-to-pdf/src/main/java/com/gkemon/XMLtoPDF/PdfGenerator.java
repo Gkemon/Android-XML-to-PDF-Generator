@@ -150,8 +150,12 @@ public class PdfGenerator {
 
         Build setFolderNameOrPath(String folderName);
 
-        Build openPDAfterGeneration(boolean open);
+        Build actionAfterPDFGeneration(ActionAfterPDFGeneration open);
 
+    }
+
+    public enum ActionAfterPDFGeneration {
+        OPEN, SHARE
     }
 
 
@@ -166,7 +170,7 @@ public class PdfGenerator {
         private List<View> viewList = new ArrayList<>();
         private String fileName;
         private String targetPdf;
-        private boolean openPdfFile = true;
+        private ActionAfterPDFGeneration actionAfterPDFGeneration = ActionAfterPDFGeneration.OPEN;
         private String folderName;
         private String directoryPath;
         private Disposable disposable;
@@ -204,14 +208,17 @@ public class PdfGenerator {
                 pdfGeneratorListener.onSuccess(new SuccessResponse(pdfDocument, file, widthInPS, heightInPS));
         }
 
-        private void openGeneratedPDF() {
+        private void dealAfterGeneration(ActionAfterPDFGeneration actionAfterPDFGeneration) {
             try {
                 File file = new File(targetPdf);
                 if (file.exists()) {
-                    Uri path = FileProvider.getUriForFile(context, context.getPackageName() + ".xmlToPdf.provider", file);
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    Uri path = FileProvider.getUriForFile(
+                            context,
+                            context.getPackageName() + ".xmlToPdf.provider",
+                            file);
+                    Intent intent = new Intent(actionAfterPDFGeneration == ActionAfterPDFGeneration.OPEN ?
+                            Intent.ACTION_VIEW : Intent.ACTION_SEND);
                     intent.setDataAndType(path, "application/pdf");
-
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
@@ -313,7 +320,7 @@ public class PdfGenerator {
                         return;
                     }
                     if (folderName.contains("/storage/emulated/")) {
-                        directoryPath = folderName+"/";
+                        directoryPath = folderName + "/";
                     } else
                         directoryPath = directoryPath + "/" + folderName + "/";
                     File file = new File(directoryPath);
@@ -342,9 +349,7 @@ public class PdfGenerator {
                             })
                             .subscribe(() -> {
                                 postSuccess(document, filePath, pageWidthInPixel, pageHeightInPixel);
-                                if (openPdfFile) {
-                                    openGeneratedPDF();
-                                }
+                                dealAfterGeneration(actionAfterPDFGeneration);
                             }, this::postFailure);
 
 
@@ -454,8 +459,8 @@ public class PdfGenerator {
 
 
         @Override
-        public Build openPDAfterGeneration(boolean openPdfFile) {
-            this.openPdfFile = openPdfFile;
+        public Build actionAfterPDFGeneration(ActionAfterPDFGeneration actionAfterPDFGeneration) {
+            this.actionAfterPDFGeneration = actionAfterPDFGeneration;
             return this;
         }
 

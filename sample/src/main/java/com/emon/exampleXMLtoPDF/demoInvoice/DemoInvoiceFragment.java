@@ -1,9 +1,7 @@
 package com.emon.exampleXMLtoPDF.demoInvoice;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,10 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.emon.exampleXMLtoPDF.R;
 import com.emon.exampleXMLtoPDF.dummyList.DummyContent;
 import com.emon.exampleXMLtoPDF.dummyList.DummyItemRecyclerViewAdapter;
@@ -115,7 +109,7 @@ public class DemoInvoiceFragment extends Fragment {
                 /* It is folder name. If you set the folder name like this pattern (FolderA/FolderB/FolderC), then
                  * FolderA creates first.Then FolderB inside FolderB and also FolderC inside the FolderB and finally
                  * the pdf file named "Test-PDF.pdf" will be store inside the FolderB. */
-                .openPDAfterGeneration(true)
+                .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
                 /* It true then the generated pdf will be shown after generated. */
                 .build(new PdfGeneratorListener() {
                     @Override

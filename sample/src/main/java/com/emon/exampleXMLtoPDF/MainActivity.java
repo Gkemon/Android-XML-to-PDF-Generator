@@ -1,7 +1,6 @@
 package com.emon.exampleXMLtoPDF;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         .fromLayoutXML( R.layout.layout_print_horizontal_scroll)
                         .setFileName("Demo-Horizontal-Scroll-View-Text")
                         .setFolderNameOrPath("MyFolder/MyDemoHorizontalText/")
-                        .openPDAfterGeneration(true)
+                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.SHARE)
                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
@@ -107,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                         .setFolderNameOrPath(
                                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()
                                         + "/" + getString(R.string.app_name))
-                        .openPDAfterGeneration(true)
+                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
@@ -154,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                                 R.id.tv_print_area, R.id.tv_print_area, R.id.tv_print_area)
                         .setFileName("Demo-Text-Multi-Page")
                         .setFolderNameOrPath("MyFolder/MyDemoTextMultiPage/")
-                        .openPDAfterGeneration(true)
+                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
@@ -212,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                                     .fromView(tvDynamicText, tvDynamicText, tvDynamicText)
                                     .setFileName("Demo-Text-Multi-Page-With-Dynamic-Text")
                                     .setFolderNameOrPath("MyFolder/MyDemoTextMultiPageDynamic/")
-                                    .openPDAfterGeneration(true)
+                                    .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
                                     .build(new PdfGeneratorListener() {
                                         @Override
                                         public void onFailure(FailureResponse failureResponse) {
@@ -266,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                         .fromView(content, content, content)
                         .setFileName("Demo-Barcode")
                         .setFolderNameOrPath("MyFolder/MyDemoBarcode/")
-                        .openPDAfterGeneration(true)
+                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
@@ -315,8 +314,8 @@ public class MainActivity extends AppCompatActivity {
                         .fromView(content)
                         .setFileName("Demo-List")
                         .setFolderNameOrPath("MyFolder/MyDemoList/")
-                        .openPDAfterGeneration(true)
-                        .build(new PdfGeneratorListener() {
+                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
+                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
                                 super.onFailure(failureResponse);
