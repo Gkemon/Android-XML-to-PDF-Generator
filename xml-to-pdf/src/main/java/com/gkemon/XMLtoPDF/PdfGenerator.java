@@ -105,15 +105,16 @@ public class PdfGenerator {
 
     public interface ViewSourceIntakeStep {
         /**
-         * @param viewList  MUST NEED TO set android:layout_width A FIXED
-         * VALUE INSTEAD OF "wrap_content" and "match_parent" OTHERWISE SIZING COULD BE MALFORMED
-         * IN PDF FOR DIFFERENT DEVICE SCREEN
+         * @param viewList MUST NEED TO set android:layout_width A FIXED
+         *                 VALUE INSTEAD OF "wrap_content" and "match_parent" OTHERWISE SIZING COULD BE MALFORMED
+         *                 IN PDF FOR DIFFERENT DEVICE SCREEN
          */
         FileNameStep fromView(View... viewList);
+
         /**
-         * @param viewList  MUST NEED TO set android:layout_width A FIXED
-         * VALUE INSTEAD OF "wrap_content" and "match_parent" OTHERWISE SIZING COULD BE MALFORMED
-         * IN PDF FOR DIFFERENT DEVICE SCREEN
+         * @param viewList MUST NEED TO set android:layout_width A FIXED
+         *                 VALUE INSTEAD OF "wrap_content" and "match_parent" OTHERWISE SIZING COULD BE MALFORMED
+         *                 IN PDF FOR DIFFERENT DEVICE SCREEN
          */
         FileNameStep fromViewList(List<View> viewList);
     }
@@ -311,7 +312,10 @@ public class PdfGenerator {
                         postFailure("Cannot find the storage path to create the pdf file.");
                         return;
                     }
-                    directoryPath = directoryPath + "/" + folderName + "/";
+                    if (folderName.contains("/storage/emulated/")) {
+                        directoryPath = folderName+"/";
+                    } else
+                        directoryPath = directoryPath + "/" + folderName + "/";
                     File file = new File(directoryPath);
                     if (!file.exists()) {
                         if (!file.mkdirs()) {

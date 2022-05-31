@@ -3,6 +3,7 @@ package com.emon.exampleXMLtoPDF;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +26,7 @@ import com.gkemon.XMLtoPDF.model.SuccessResponse;
 
 public class MainActivity extends AppCompatActivity {
     Button btnPrint, btnPrintMultiPage, btnInvoice, btnDemoBarcode, btnPrintDemoList,
-            btnPrintMultiPageDynamic;
+            btnPrintMultiPageDynamic,btnHorizontalScrollView;
     private Fragment demoInvoiceFragment;
 
     @Override
@@ -38,7 +39,56 @@ public class MainActivity extends AppCompatActivity {
         btnDemoBarcode = findViewById(R.id.bt_demo_barcode);
         btnPrintDemoList = findViewById(R.id.bt_print_list);
         btnPrintMultiPageDynamic = findViewById(R.id.bt_print_multi_page_dynamic);
+        btnHorizontalScrollView = findViewById(R.id.bt_horizontal_scroll_view);
         demoInvoiceFragment = new DemoInvoiceFragment();
+
+        btnHorizontalScrollView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                /**
+                 * MUST NEED TO set android:layout_width A FIXED
+                 * VALUE INSTEAD OF "wrap_content" and "match_parent" OTHERWISE SIZING COULD BE MALFORMED
+                 * IN PDF FOR DIFFERENT DEVICE SCREEN
+                 */
+
+                PdfGenerator.getBuilder()
+                        .setContext(MainActivity.this)
+                        .fromLayoutXMLSource()
+                        .fromLayoutXML( R.layout.layout_print_horizontal_scroll)
+                        .setFileName("Demo-Horizontal-Scroll-View-Text")
+                        .setFolderNameOrPath("MyFolder/MyDemoHorizontalText/")
+                        .openPDAfterGeneration(true)
+                        .build(new PdfGeneratorListener() {
+                            @Override
+                            public void onFailure(FailureResponse failureResponse) {
+                                super.onFailure(failureResponse);
+                            }
+
+                            @Override
+                            public void onStartPDFGeneration() {
+
+                            }
+
+                            @Override
+                            public void onFinishPDFGeneration() {
+
+                            }
+
+                            @Override
+                            public void showLog(String log) {
+                                super.showLog(log);
+                            }
+
+                            @Override
+                            public void onSuccess(SuccessResponse response) {
+                                super.onSuccess(response);
+                            }
+                        });
+            }
+        });
+
+
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
                         .fromViewIDSource()
                         .fromViewID(MainActivity.this, R.id.tv_print_area)
                         .setFileName("Demo-Text")
-                        .setFolderNameOrPath("MyFolder/MyDemoText/")
+                        .setFolderNameOrPath(
+                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()
+                                        + "/" + getString(R.string.app_name))
                         .openPDAfterGeneration(true)
                         .build(new PdfGeneratorListener() {
                             @Override
@@ -211,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                 PdfGenerator.getBuilder()
                         .setContext(MainActivity.this)
                         .fromViewSource()
-                        .fromView(content,content,content)
+                        .fromView(content, content, content)
                         .setFileName("Demo-Barcode")
                         .setFolderNameOrPath("MyFolder/MyDemoBarcode/")
                         .openPDAfterGeneration(true)
@@ -297,12 +349,13 @@ public class MainActivity extends AppCompatActivity {
         btnInvoice.setOnClickListener(v -> {
             if (getSupportFragmentManager().findFragmentById(android.R.id.content) == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .add(android.R.id.content,demoInvoiceFragment)
+                        .add(android.R.id.content, demoInvoiceFragment)
                         .commit();
             }
         });
 
     }
+
     @Override
     public void onBackPressed() {
         getSupportFragmentManager().beginTransaction().remove(demoInvoiceFragment).commit();
