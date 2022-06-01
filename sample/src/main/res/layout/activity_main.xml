@@ -101,6 +101,16 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             tools:ignore="HardcodedText" />
+        <Button
+            android:id="@+id/bt_print_landscape"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Print A Landscape PDF"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
 
     </LinearLayout>
 </ScrollView>

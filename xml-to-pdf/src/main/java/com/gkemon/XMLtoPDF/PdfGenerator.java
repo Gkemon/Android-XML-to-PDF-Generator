@@ -6,12 +6,14 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
@@ -152,10 +154,16 @@ public class PdfGenerator {
 
         Build actionAfterPDFGeneration(ActionAfterPDFGeneration open);
 
+        Build setPrintingMode(PrintingMode printingMode);
+
     }
 
     public enum ActionAfterPDFGeneration {
         OPEN, SHARE
+    }
+
+    public enum PrintingMode {
+        LANDSCAPE, PORTRAIT
     }
 
 
@@ -174,6 +182,7 @@ public class PdfGenerator {
         private String folderName;
         private String directoryPath;
         private Disposable disposable;
+        private PrintingMode printingMode = PrintingMode.PORTRAIT;
 
         private void postFailure(String errorMessage) {
             FailureResponse failureResponse = new FailureResponse(errorMessage);
@@ -356,7 +365,8 @@ public class PdfGenerator {
                 } else {
                     postFailure("Context is null");
                 }
-            } catch (Exception e) {
+            } catch (
+                    Exception e) {
                 postFailure(e);
             }
 
@@ -461,6 +471,12 @@ public class PdfGenerator {
         @Override
         public Build actionAfterPDFGeneration(ActionAfterPDFGeneration actionAfterPDFGeneration) {
             this.actionAfterPDFGeneration = actionAfterPDFGeneration;
+            return this;
+        }
+
+        @Override
+        public Build setPrintingMode(PrintingMode printingMode) {
+            this.printingMode = printingMode;
             return this;
         }
 
