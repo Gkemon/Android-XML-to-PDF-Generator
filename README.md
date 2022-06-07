@@ -107,7 +107,7 @@ text view in the XML and you want to populate it with a data then try the [appro
 			/* It is folder name. If you set the folder name like this pattern (FolderA/FolderB/FolderC), then
 			 * FolderA creates first.Then FolderB inside FolderB and also FolderC inside the FolderB and finally
 			 * the pdf file named "Test-PDF.pdf" will be store inside the FolderB. */
-                        .openPDFafterGeneration(true)
+                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.SHARE)
 			/* It true then the generated pdf will be shown after generated. */
                         .build(new PdfGeneratorListener() {
                             @Override
@@ -153,7 +153,7 @@ text view in the XML and you want to populate it with a data then try the [appro
 			 * You can also invoke "fromViewIDList()" method here which takes list of view ids instead of array.*/
                         .setFileName("Test-PDF")
                         .setFolderName("Test-PDF-folder")
-                        .openPDFafterGeneration(true)
+                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
@@ -198,7 +198,7 @@ PdfGenerator.getBuilder()
                         .fromView(view)
                         .setFileName("Test-PDF")
                         .setFolderName("Test-PDF-folder")
-                        .openPDFafterGeneration(true)
+                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
