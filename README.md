@@ -87,7 +87,14 @@ You can generate <b>PDF</b> from many sources.
 * View ids (i.e: ```R.id.viewID```)
 * Java view objects (i.e ```View```,```TextView```,```LinearLayout```) because sometimes we need to change the content of the XML and then dealing this java view object is only way to do this.
 
-### (Important noted: For better output and make the PDF more responsive,please try to set ```android:layout_width``` of the top most view of XML a fixed value instead of ```wrap_content``` and ```match_parent``` otherwise sizing could be malformed in PDF for different device screen.)
+## ➤ Important Note
+![#f03c15](https://via.placeholder.com/15/f03c15/f03c15.png)
+![#f03c15](https://via.placeholder.com/15/f03c15/f03c15.png)
+![#f03c15](https://via.placeholder.com/15/f03c15/f03c15.png)
+For better output and make the PDF more responsive,please try to set ```android:layout_width``` of the top most view of XML a fixed value in pixel or ```px``` (Recommandation is not use ```dp``` as it depends on device screen) instead of ```wrap_content``` and ```match_parent``` otherwise sizing could be malformed in PDF for different device screen.Suppose if you want to print an A4 sized pdf so you can see my example from [where](https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/master/sample/src/main/res/layout/demo_a4_sized_page.xml). You just need to make your XML's  width:hight aspected ratio 1:1.14142. Referece is [here](https://www.papersizes.org/sp/a/a4#:~:text=The%20aspect%20ratio%20(width%3Aheight,(1%3A%E2%88%9A2) ).
+![#f03c15](https://via.placeholder.com/15/f03c15/f03c15.png)
+![#f03c15](https://via.placeholder.com/15/f03c15/f03c15.png)
+![#f03c15](https://via.placeholder.com/15/f03c15/f03c15.png)
 
 ### From layout resources : 
 ( Only static content in XML will be printed by this approach. If you want to change the content of the XML ,suppose there is a
