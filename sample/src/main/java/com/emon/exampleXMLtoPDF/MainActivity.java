@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                         .fromLayoutXML(R.layout.layout_print_horizontal_scroll)
                         .setFileName("Demo-Horizontal-Scroll-View-Text")
                         .setFolderNameOrPath("MyFolder/MyDemoHorizontalText/")
-                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.SHARE)
+                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.NONE)
                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                         .fromViewID(MainActivity.this, R.id.tv_print_area)
                         .setFileName("Demo-Landscape")
                         .setFolderNameOrPath("MyFolder/MyDemoLandscape/")
-                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
+                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.SHARE)
                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {

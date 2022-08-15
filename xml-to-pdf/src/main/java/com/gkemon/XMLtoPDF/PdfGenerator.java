@@ -156,7 +156,7 @@ public class PdfGenerator {
     }
 
     public enum ActionAfterPDFGeneration {
-        OPEN, SHARE
+        OPEN, SHARE, NONE
     }
 
     public enum PrintingMode {
@@ -355,7 +355,8 @@ public class PdfGenerator {
                             })
                             .subscribe(() -> {
                                 postSuccess(document, filePath, pageWidthInPixel, pageHeightInPixel);
-                                dealAfterGeneration(actionAfterPDFGeneration);
+                                if (actionAfterPDFGeneration != ActionAfterPDFGeneration.NONE)
+                                    dealAfterGeneration(actionAfterPDFGeneration);
                             }, this::postFailure);
 
 
