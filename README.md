@@ -286,3 +286,11 @@ The source code is licensed under the [Apache License 2.0](https://github.com/Gk
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#license)
 
 
+## ➤ App using it 
+* [Codeddit Programmer Community](
+https://play.google.com/store/apps/details?id=com.codedditapp.codeddit)
+* [হাজিরা খাতা - Attendance sheet - HaziraKhata](
+https://play.google.com/store/apps/details?id=com.Teachers.HaziraKhataByGk)
+* [Trust Axiata Pay](
+https://play.google.com/store/apps/details?id=com.tad.bdkepler&hl=en&gl=US)
+* [Prideboard](https://play.google.com/store/apps/details?id=com.pridesys.prideboard)
