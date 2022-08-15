@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
                         .setFileName("Demo-Landscape")
                         .setFolderNameOrPath("MyFolder/MyDemoLandscape/")
                         .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
-                        .setPrintingMode(PdfGenerator.PrintingMode.LANDSCAPE)
                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
