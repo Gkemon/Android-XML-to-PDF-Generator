@@ -4,6 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="sample/src/main/res/layout/activity_main.xml" value="0.15070921985815602" />
+        <entry key="sample/src/main/res/layout/demo_a4_sized_page.xml" value="0.1" />
+        <entry key="sample/src/main/res/layout/demo_barcode.xml" value="0.2898550724637681" />
+        <entry key="sample/src/main/res/layout/demo_barcode_90_degree_rotated.xml" value="0.67" />
+        <entry key="sample/src/main/res/layout/fragment_demo_invoice.xml" value="0.25407608695652173" />
         <entry key="sample/src/main/res/layout/layout_print.xml" value="0.15070921985815602" />
         <entry key="sample/src/main/res/layout/layout_print_horizontal_scroll.xml" value="0.15070921985815602" />
       </map>

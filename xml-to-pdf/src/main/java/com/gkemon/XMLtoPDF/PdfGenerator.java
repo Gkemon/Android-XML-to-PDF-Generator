@@ -153,9 +153,6 @@ public class PdfGenerator {
         Build setFolderNameOrPath(String folderName);
 
         Build actionAfterPDFGeneration(ActionAfterPDFGeneration open);
-
-        Build setPrintingMode(PrintingMode printingMode);
-
     }
 
     public enum ActionAfterPDFGeneration {
@@ -471,12 +468,6 @@ public class PdfGenerator {
         @Override
         public Build actionAfterPDFGeneration(ActionAfterPDFGeneration actionAfterPDFGeneration) {
             this.actionAfterPDFGeneration = actionAfterPDFGeneration;
-            return this;
-        }
-
-        @Override
-        public Build setPrintingMode(PrintingMode printingMode) {
-            this.printingMode = printingMode;
             return this;
         }
 

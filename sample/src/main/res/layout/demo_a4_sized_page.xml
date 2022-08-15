@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="1000px"
+    android:layout_height="1414.4px">
+<!-- Please check this link
+   https://www.papersizes.org/sp/a/a4#:~:text=The%20aspect%20ratio%20(width%3Aheight,(1%3A%E2%88%9A2).-->
+    <TextView
+        android:textSize="@dimen/_100ssp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="A4">
+    </TextView>
+</LinearLayout>
