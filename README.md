@@ -294,3 +294,6 @@ https://play.google.com/store/apps/details?id=com.Teachers.HaziraKhataByGk)
 * [Trust Axiata Pay](
 https://play.google.com/store/apps/details?id=com.tad.bdkepler&hl=en&gl=US)
 * [Prideboard](https://play.google.com/store/apps/details?id=com.pridesys.prideboard)
+
+* [Treatbook - Your Health Coach and Medical Tracker](
+https://play.google.com/store/apps/details?id=com.newlit.treatbook&hl=en&gl=US)
