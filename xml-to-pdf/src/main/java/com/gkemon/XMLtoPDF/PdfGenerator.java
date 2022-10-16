@@ -6,14 +6,12 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Canvas;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
@@ -153,6 +151,7 @@ public class PdfGenerator {
         Build setFolderNameOrPath(String folderName);
 
         Build actionAfterPDFGeneration(ActionAfterPDFGeneration open);
+
     }
 
     public enum ActionAfterPDFGeneration {
@@ -164,8 +163,12 @@ public class PdfGenerator {
     }
 
 
-    public static class Builder implements Build, FileNameStep, PageSizeStep
-            , LayoutXMLSourceIntakeStep, ViewSourceIntakeStep, ViewIDSourceIntakeStep
+    public static class Builder implements Build
+            , FileNameStep
+            , PageSizeStep
+            , LayoutXMLSourceIntakeStep
+            , ViewSourceIntakeStep
+            , ViewIDSourceIntakeStep
             , FromSourceStep, ContextStep {
         private static final int NO_XML_SELECTED_YET = -1;
         private int pageWidthInPixel = AS_LIKE_XML_WIDTH;
@@ -179,7 +182,6 @@ public class PdfGenerator {
         private String folderName;
         private String directoryPath;
         private Disposable disposable;
-        private PrintingMode printingMode = PrintingMode.PORTRAIT;
 
         private void postFailure(String errorMessage) {
             FailureResponse failureResponse = new FailureResponse(errorMessage);
@@ -222,8 +224,12 @@ public class PdfGenerator {
                             context,
                             context.getPackageName() + ".xmlToPdf.provider",
                             file);
-                    Intent intent = new Intent(actionAfterPDFGeneration == ActionAfterPDFGeneration.OPEN ?
-                            Intent.ACTION_VIEW : Intent.ACTION_SEND);
+                    Intent intent;
+                    if (actionAfterPDFGeneration == ActionAfterPDFGeneration.OPEN)
+                        intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                    else intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType(context.getContentResolver().getType(path));
+                    intent.putExtra(Intent.EXTRA_STREAM, path);
                     intent.setDataAndType(path, "application/pdf");
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -329,6 +335,11 @@ public class PdfGenerator {
                         directoryPath = folderName + "/";
                     } else
                         directoryPath = directoryPath + "/" + folderName + "/";
+
+                    directoryPath = directoryPath.replace(" ", "_")
+                            .replace(",", "")
+                            .replace(":", "_");
+
                     File file = new File(directoryPath);
                     if (!file.exists()) {
                         if (!file.mkdirs()) {
@@ -435,7 +446,7 @@ public class PdfGenerator {
                                 if (multiplePermissionsReport.areAllPermissionsGranted()) {
                                     print();
                                 } else
-                                    postLog("All necessary permission is not granted by user.Please do that first");
+                                    postLog("All necessary permission is not granted by user. Please do that first");
 
                             }
 

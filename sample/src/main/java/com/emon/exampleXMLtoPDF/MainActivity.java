@@ -3,6 +3,7 @@ package com.emon.exampleXMLtoPDF;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         btnPrintHorizontalScrollView = findViewById(R.id.bt_horizontal_scroll_view);
         btnPrintLandscape = findViewById(R.id.bt_print_landscape);
         demoInvoiceFragment = new DemoInvoiceFragment();
+
 
         btnPrintHorizontalScrollView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,9 +152,10 @@ public class MainActivity extends AppCompatActivity {
                         .fromViewID(MainActivity.this, R.id.tv_print_area)
                         .setFileName("Demo-Text")
                         .setFolderNameOrPath(
-                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()
+                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()
                                         + "/" + getString(R.string.app_name))
                         .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
+                        .handleInFileStorage(true,true)
                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {
@@ -172,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void showLog(String log) {
                                 super.showLog(log);
+                                Log.d("PDF-generation",log);
                             }
 
                             @Override
