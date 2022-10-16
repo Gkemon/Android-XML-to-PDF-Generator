@@ -155,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
                                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()
                                         + "/" + getString(R.string.app_name))
                         .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
-                        .handleInFileStorage(true,true)
                         .build(new PdfGeneratorListener() {
                             @Override
                             public void onFailure(FailureResponse failureResponse) {

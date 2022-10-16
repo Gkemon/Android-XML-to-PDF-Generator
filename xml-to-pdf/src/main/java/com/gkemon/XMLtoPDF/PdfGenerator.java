@@ -228,8 +228,11 @@ public class PdfGenerator {
                     if (actionAfterPDFGeneration == ActionAfterPDFGeneration.OPEN)
                         intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                     else intent = new Intent(Intent.ACTION_SEND);
+
                     intent.setType(context.getContentResolver().getType(path));
                     intent.putExtra(Intent.EXTRA_STREAM, path);
+                    intent.putExtra(Intent.EXTRA_TITLE, fileName+".pdf");
+
                     intent.setDataAndType(path, "application/pdf");
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
