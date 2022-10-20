@@ -9,15 +9,24 @@ import android.content.pm.PackageManager;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.os.StrictMode;
+import android.provider.DocumentsContract;
 import android.text.TextUtils;
 import android.view.View;
 
+import androidx.activity.ComponentActivity;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.ActivityResultRegistry;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.gkemon.XMLtoPDF.model.FailureResponse;
 import com.gkemon.XMLtoPDF.model.SuccessResponse;
@@ -31,6 +40,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -91,7 +101,7 @@ public class PdfGenerator {
 
 
     public interface ContextStep {
-        FromSourceStep setContext(Context context);
+        FromSourceStep setContext(ComponentActivity context);
     }
 
     public interface FromSourceStep {
@@ -152,16 +162,13 @@ public class PdfGenerator {
 
         Build actionAfterPDFGeneration(ActionAfterPDFGeneration open);
 
+        Build savePDFSharedStorage(XmlToPDFLifecycleObserver xmlToPDFLifecycleObserver);
+
     }
 
     public enum ActionAfterPDFGeneration {
         OPEN, SHARE, NONE
     }
-
-    public enum PrintingMode {
-        LANDSCAPE, PORTRAIT
-    }
-
 
     public static class Builder implements Build
             , FileNameStep
@@ -170,18 +177,17 @@ public class PdfGenerator {
             , ViewSourceIntakeStep
             , ViewIDSourceIntakeStep
             , FromSourceStep, ContextStep {
-        private static final int NO_XML_SELECTED_YET = -1;
         private int pageWidthInPixel = AS_LIKE_XML_WIDTH;
         private int pageHeightInPixel = AS_LIKE_XML_HEIGHT;
         private Context context;
         private PdfGeneratorListener pdfGeneratorListener;
         private List<View> viewList = new ArrayList<>();
         private String fileName;
-        private String targetPdf;
         private ActionAfterPDFGeneration actionAfterPDFGeneration = ActionAfterPDFGeneration.OPEN;
         private String folderName;
         private String directoryPath;
         private Disposable disposable;
+        private XmlToPDFLifecycleObserver xmlToPDFLifecycleObserver;
 
         private void postFailure(String errorMessage) {
             FailureResponse failureResponse = new FailureResponse(errorMessage);
@@ -211,47 +217,94 @@ public class PdfGenerator {
                 pdfGeneratorListener.onFinishPDFGeneration();
         }
 
-        private void postSuccess(PdfDocument pdfDocument, File file, int widthInPS, int heightInPS) {
+        private void postSuccess(PdfDocument pdfDocument,
+                                 File file,
+                                 int widthInPS,
+                                 int heightInPS) {
             if (pdfGeneratorListener != null)
-                pdfGeneratorListener.onSuccess(new SuccessResponse(pdfDocument, file, widthInPS, heightInPS));
+                pdfGeneratorListener.onSuccess(
+                        new SuccessResponse(
+                                pdfDocument,
+                                file,
+                                widthInPS,
+                                heightInPS));
         }
 
-        private void dealAfterGeneration(ActionAfterPDFGeneration actionAfterPDFGeneration) {
+        private void dealAfterGeneration(ActionAfterPDFGeneration actionAfterPDFGeneration,
+                                         File file) {
             try {
-                File file = new File(targetPdf);
-                if (file.exists()) {
-                    Uri path = FileProvider.getUriForFile(
-                            context,
-                            context.getPackageName() + ".xmlToPdf.provider",
-                            file);
+                if (actionAfterPDFGeneration != ActionAfterPDFGeneration.NONE) {
+                    if (file.exists()) {
+                        Intent intent;
+                        if (actionAfterPDFGeneration == ActionAfterPDFGeneration.OPEN)
+                            intent = new Intent(Intent.ACTION_VIEW);
+                        else {
+                            intent = new Intent(Intent.ACTION_SEND);
+                        }
+                        getPDFIntent(file, intent);
+                        try {
+                            context.startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            postFailure(e);
+                        }
+                    } else {
+                        String path = TextUtils.isEmpty(directoryPath) ? "null" : directoryPath;
+                        postFailure("PDF file is not existing in storage. Your Generated path is " + path);
+                    }
+                } else {
+                    postLog("PDF is generation done but as you set ActionAfterPDFGeneration.NONE" +
+                            " so it is not dealing with it after generation");
+                }
+            } catch (Exception exception) {
+                postFailure("Error occurred while opening the PDF. Error message : " + exception.getMessage());
+            }
+        }
+
+        private void dealAfterSavingInSharedStore(ActionAfterPDFGeneration actionAfterPDFGeneration,
+                                                  Uri uri) {
+            try {
+                if (actionAfterPDFGeneration != ActionAfterPDFGeneration.NONE) {
                     Intent intent;
                     if (actionAfterPDFGeneration == ActionAfterPDFGeneration.OPEN)
-                        intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                    else intent = new Intent(Intent.ACTION_SEND);
-
-                    intent.setType(context.getContentResolver().getType(path));
-                    intent.putExtra(Intent.EXTRA_STREAM, path);
-                    intent.putExtra(Intent.EXTRA_TITLE, fileName+".pdf");
-
-                    intent.setDataAndType(path, "application/pdf");
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
+                        intent = new Intent(Intent.ACTION_VIEW);
+                    else {
+                        intent = new Intent(Intent.ACTION_SEND);
+                    }
+                    getPDFIntent(uri, intent);
                     try {
                         context.startActivity(intent);
                     } catch (ActivityNotFoundException e) {
                         postFailure(e);
                     }
                 } else {
-                    String path = TextUtils.isEmpty(directoryPath) ? "null" : directoryPath;
-                    postFailure("PDF file is not existing in storage. Your Generated path is " + path);
+                    postLog("PDF is generation done but as you set ActionAfterPDFGeneration.NONE" +
+                            " so it is not dealing with it after generation");
                 }
             } catch (Exception exception) {
                 postFailure("Error occurred while opening the PDF. Error message : " + exception.getMessage());
             }
 
+        }
+
+        private void getPDFIntent(File file, Intent intent) {
+            Uri path = getUriForFile(file);
+            getPDFIntent(path, intent);
+        }
+
+        private void getPDFIntent(Uri path, Intent intent) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, path);
+            }
+            intent.setDataAndType(path, "application/pdf");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        }
+
+        private Uri getUriForFile(File file) {
+            return FileProvider.getUriForFile(
+                    context,
+                    context.getPackageName() + ".xmlToPdf.provider",
+                    file);
         }
 
         /**
@@ -334,7 +387,10 @@ public class PdfGenerator {
                         postFailure("Cannot find the storage path to create the pdf file.");
                         return;
                     }
-                    if (folderName.contains("/storage/emulated/")) {
+
+                    if (TextUtils.isEmpty(folderName)) {
+                        directoryPath = directoryPath + "/";
+                    } else if (folderName.contains("/storage/emulated/")) {
                         directoryPath = folderName + "/";
                     } else
                         directoryPath = directoryPath + "/" + folderName + "/";
@@ -352,36 +408,85 @@ public class PdfGenerator {
                         //Folder is made here
                     }
 
-                    targetPdf = directoryPath + fileName + ".pdf";
+                    String targetPdf = directoryPath + fileName + ".pdf";
 
-                    File filePath = new File(targetPdf);
+                    File fileFinalResult = new File(targetPdf);
                     //File is created under the folder but not yet written.
 
                     disposeDisposable();
                     postOnGenerationStart();
-                    disposable = Completable.fromAction(() -> document.writeTo(new FileOutputStream(filePath)))
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doFinally(() -> {
-                                document.close();
-                                disposeDisposable();
-                                postOnGenerationFinished();
-                            })
-                            .subscribe(() -> {
-                                postSuccess(document, filePath, pageWidthInPixel, pageHeightInPixel);
-                                if (actionAfterPDFGeneration != ActionAfterPDFGeneration.NONE)
-                                    dealAfterGeneration(actionAfterPDFGeneration);
-                            }, this::postFailure);
-
-
+                    //When user want to save pdf in shared storage
+                    if (xmlToPDFLifecycleObserver != null) {
+                        xmlToPDFLifecycleObserver.setPdfSaveListener(uri -> {
+                            writePDFOnSavedBlankPDFFile(document, uri);
+                        });
+                        Intent intent;
+                        intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                        intent.putExtra(Intent.EXTRA_TITLE, fileName);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        getPDFIntent(fileFinalResult, intent);
+                        xmlToPDFLifecycleObserver.launchPDFSaverPicker(intent);
+                    } else {
+                        writePDF(document, fileFinalResult);
+                    }
                 } else {
                     postFailure("Context is null");
                 }
-            } catch (
-                    Exception e) {
+            } catch (Exception e) {
                 postFailure(e);
             }
 
+        }
+
+        private void writePDFOnSavedBlankPDFFile(PdfDocument document, Uri uri) {
+            try {
+                ParcelFileDescriptor pfd = context.getContentResolver().
+                        openFileDescriptor(uri, "w");
+                FileOutputStream fileOutputStream =
+                        new FileOutputStream(pfd.getFileDescriptor());
+                disposable = Completable.fromAction(() ->
+                                document.writeTo(fileOutputStream))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doFinally(() -> {
+                            document.close();
+                            fileOutputStream.close();
+                            pfd.close();
+                            disposeDisposable();
+                            postOnGenerationFinished();
+                        })
+                        .subscribe(() -> {
+                            dealAfterSavingInSharedStore(actionAfterPDFGeneration, uri);
+                            postSuccess(
+                                    document,
+                                    FileUtils.getFile(context, uri),
+                                    pageWidthInPixel,
+                                    pageHeightInPixel);
+                        }, this::postFailure);
+            } catch (IOException e) {
+                postFailure(e);
+            }
+        }
+
+        private void writePDF(PdfDocument document, File fileFinalResult) {
+            disposable = Completable.fromAction(() ->
+                            document.writeTo(new FileOutputStream(fileFinalResult)))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                        document.close();
+                        disposeDisposable();
+                        postOnGenerationFinished();
+                    })
+                    .subscribe(() -> {
+                        postSuccess(
+                                document,
+                                fileFinalResult,
+                                pageWidthInPixel,
+                                pageHeightInPixel);
+
+                        dealAfterGeneration(actionAfterPDFGeneration, fileFinalResult);
+                    }, this::postFailure);
         }
 
 
@@ -420,9 +525,11 @@ public class PdfGenerator {
                 return false;
             }
             return ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                    Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                    PackageManager.PERMISSION_GRANTED &&
                     ContextCompat.checkSelfPermission(context,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                            PackageManager.PERMISSION_GRANTED;
         }
 
         @Override
@@ -435,7 +542,8 @@ public class PdfGenerator {
                         " Permission taking popup (using https://github.com/Karumi/Dexter) is going " +
                         "to be shown");
                 Dexter.withContext(context)
-                        .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+                        .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE)
                         .withListener(new MultiplePermissionsListener() {
                             @Override
                             public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
@@ -486,9 +594,15 @@ public class PdfGenerator {
             return this;
         }
 
+        @Override
+        public Build savePDFSharedStorage(XmlToPDFLifecycleObserver xmlToPDFLifecycleObserver) {
+            this.xmlToPDFLifecycleObserver = xmlToPDFLifecycleObserver;
+            return this;
+        }
+
 
         @Override
-        public FromSourceStep setContext(Context context) {
+        public FromSourceStep setContext(ComponentActivity context) {
             this.context = context;
             return this;
         }
@@ -549,6 +663,39 @@ public class PdfGenerator {
         @Override
         public ViewSourceIntakeStep fromViewSource() {
             return this;
+        }
+    }
+
+    interface PDFSaveListener {
+        void onBlankPDFCreatedInSharedStorage(@Nullable Uri uri);
+    }
+
+    public static class XmlToPDFLifecycleObserver implements DefaultLifecycleObserver {
+        private final ActivityResultRegistry mRegistry;
+        private ActivityResultLauncher<Intent> mGetContent;
+        private PDFSaveListener pdfSaveListener;
+
+        public XmlToPDFLifecycleObserver(@NonNull ComponentActivity componentActivity) {
+            mRegistry = componentActivity.getActivityResultRegistry();
+        }
+
+        @Override
+        public void onCreate(@NonNull LifecycleOwner owner) {
+            mGetContent = mRegistry.register("saved-pdf-from-xml", owner,
+                    new ActivityResultContracts.StartActivityForResult()
+                    , activityResult -> {
+                        if (activityResult.getData() != null) {
+                            pdfSaveListener.onBlankPDFCreatedInSharedStorage(activityResult.getData().getData());
+                        } else pdfSaveListener.onBlankPDFCreatedInSharedStorage(null);
+                    });
+        }
+
+        public void setPdfSaveListener(PDFSaveListener pdfSaveListener) {
+            this.pdfSaveListener = pdfSaveListener;
+        }
+
+        public void launchPDFSaverPicker(Intent intent) {
+            mGetContent.launch(intent);
         }
     }
 

@@ -96,7 +96,7 @@ public class DemoInvoiceFragment extends Fragment {
 
     public void generatePdf() {
         PdfGenerator.getBuilder()
-                .setContext(getContext())
+                .setContext(requireActivity())
                 .fromViewSource()
                 .fromView(finalInvoiceViewToPrint)
                 /* "fromLayoutXML()" takes array of layout resources.

@@ -13,11 +13,11 @@
         tools:context="com.emon.exampleXMLtoPDF.MainActivity">
 
         <TextView
-            android:layout_margin="@dimen/_5sdp"
             android:id="@+id/tv_print_area"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_200sdp"
             android:layout_gravity="top"
+            android:layout_margin="@dimen/_5sdp"
             android:background="@android:color/holo_purple"
             android:gravity="top|center"
             android:text="Hi, Im am a dummy text"
@@ -32,27 +32,29 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:backgroundTint="@android:color/holo_red_light"
-            android:text="Print The Top Demo View"
+            android:text="Print The Top Demo View \n(Pdf will be save in shared storage and after generation will open by pdf reader app)"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             tools:ignore="HardcodedText" />
+
         <Button
             android:id="@+id/bt_print_multi_page"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:backgroundTint="@android:color/holo_red_light"
-            android:text="Print The Top Demo View In Multi Page"
+            android:text="Print The Top Demo View In Multi Page\n(PDF will saved under custom folder path ''MyFolder/MyDemoTextMultiPage/'' and will open by pdf reader app with after generation)"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             tools:ignore="HardcodedText" />
+
         <Button
             android:id="@+id/bt_print_multi_page_dynamic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:backgroundTint="@android:color/holo_red_light"
-            android:text="Print The Top Demo View In Multi Page With Dynamic Text"
+            android:text="Print The Top Demo View In Multi Page With Dynamic Text (After generation it will be shown in sharing popup to share with other app)"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             tools:ignore="HardcodedText" />
@@ -97,13 +99,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:backgroundTint="@android:color/holo_red_light"
-            android:text="Print A Horizontal Scroll View"
+            android:text="Print A Horizontal Scroll View\n(PDF will saved under custom folder path ''MyFolder/MyDemoList/'' and do nothing after PDF creation)"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             tools:ignore="HardcodedText" />
+
         <Button
-            android:visibility="gone"
-            tools:visibility="visible"
             android:id="@+id/bt_print_landscape"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -112,7 +113,9 @@
             android:text="Print A Landscape PDF"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
-            tools:ignore="HardcodedText" />
+            android:visibility="gone"
+            tools:ignore="HardcodedText"
+            tools:visibility="visible" />
 
     </LinearLayout>
 </ScrollView>

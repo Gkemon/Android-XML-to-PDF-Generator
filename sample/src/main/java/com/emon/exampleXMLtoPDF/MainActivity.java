@@ -2,7 +2,6 @@ package com.emon.exampleXMLtoPDF;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnPrint, btnPrintMultiPage, btnInvoice, btnDemoBarcode, btnPrintDemoList,
             btnPrintMultiPageDynamic, btnPrintHorizontalScrollView, btnPrintLandscape;
     private Fragment demoInvoiceFragment;
+    private PdfGenerator.XmlToPDFLifecycleObserver xmlToPDFLifecycleObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,56 @@ public class MainActivity extends AppCompatActivity {
         btnPrintLandscape = findViewById(R.id.bt_print_landscape);
         demoInvoiceFragment = new DemoInvoiceFragment();
 
+        xmlToPDFLifecycleObserver = new PdfGenerator.XmlToPDFLifecycleObserver(this);
+        getLifecycle().addObserver(xmlToPDFLifecycleObserver);
+
+
+        btnPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                /**
+                 * MUST NEED TO set android:layout_width A FIXED
+                 * VALUE INSTEAD OF "wrap_content" and "match_parent" OTHERWISE SIZING COULD BE MALFORMED
+                 * IN PDF FOR DIFFERENT DEVICE SCREEN
+                 */
+
+                PdfGenerator.getBuilder()
+                        .setContext(MainActivity.this)
+                        .fromViewIDSource()
+                        .fromViewID(MainActivity.this, R.id.tv_print_area)
+                        .setFileName("Demo-Text")
+                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
+                        .savePDFSharedStorage(xmlToPDFLifecycleObserver)
+                        .build(new PdfGeneratorListener() {
+                            @Override
+                            public void onFailure(FailureResponse failureResponse) {
+                                super.onFailure(failureResponse);
+                            }
+
+                            @Override
+                            public void onStartPDFGeneration() {
+
+                            }
+
+                            @Override
+                            public void onFinishPDFGeneration() {
+
+                            }
+
+                            @Override
+                            public void showLog(String log) {
+                                super.showLog(log);
+                                Log.d("PDF-generation",log);
+                            }
+
+                            @Override
+                            public void onSuccess(SuccessResponse response) {
+                                super.onSuccess(response);
+                            }
+                        });
+            }
+        });
 
         btnPrintHorizontalScrollView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,54 +186,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnPrint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                /**
-                 * MUST NEED TO set android:layout_width A FIXED
-                 * VALUE INSTEAD OF "wrap_content" and "match_parent" OTHERWISE SIZING COULD BE MALFORMED
-                 * IN PDF FOR DIFFERENT DEVICE SCREEN
-                 */
-
-                PdfGenerator.getBuilder()
-                        .setContext(MainActivity.this)
-                        .fromViewIDSource()
-                        .fromViewID(MainActivity.this, R.id.tv_print_area)
-                        .setFileName("Demo-Text")
-                        .setFolderNameOrPath(
-                                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()
-                                        + "/" + getString(R.string.app_name))
-                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
-                        .build(new PdfGeneratorListener() {
-                            @Override
-                            public void onFailure(FailureResponse failureResponse) {
-                                super.onFailure(failureResponse);
-                            }
-
-                            @Override
-                            public void onStartPDFGeneration() {
-
-                            }
-
-                            @Override
-                            public void onFinishPDFGeneration() {
-
-                            }
-
-                            @Override
-                            public void showLog(String log) {
-                                super.showLog(log);
-                                Log.d("PDF-generation",log);
-                            }
-
-                            @Override
-                            public void onSuccess(SuccessResponse response) {
-                                super.onSuccess(response);
-                            }
-                        });
-            }
-        });
 
         btnPrintMultiPage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,8 +261,7 @@ public class MainActivity extends AppCompatActivity {
                                     .fromViewSource()
                                     .fromView(tvDynamicText, tvDynamicText, tvDynamicText)
                                     .setFileName("Demo-Text-Multi-Page-With-Dynamic-Text")
-                                    .setFolderNameOrPath("MyFolder/MyDemoTextMultiPageDynamic/")
-                                    .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
+                                    .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.SHARE)
                                     .build(new PdfGeneratorListener() {
                                         @Override
                                         public void onFailure(FailureResponse failureResponse) {
