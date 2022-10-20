@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         .fromViewIDSource()
                         .fromViewID(MainActivity.this, R.id.tv_print_area)
                         .setFileName("Demo-Text")
-                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
+                        .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.SHARE)
                         .savePDFSharedStorage(xmlToPDFLifecycleObserver)
                         .build(new PdfGeneratorListener() {
                             @Override
