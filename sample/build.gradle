@@ -38,8 +38,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
     /*Comment out the line below if you want to use library locally*/
-    //implementation project(path: ':xml-to-pdf')
+    implementation project(path: ':xml-to-pdf')
 
     /*Comment out the line below if you want to use library from jitpack repo*/
-    implementation 'com.github.Gkemon:Android-XML-to-PDF-Generator:2.6.5'
+    //implementation 'com.github.Gkemon:Android-XML-to-PDF-Generator:2.6.5'
 }
