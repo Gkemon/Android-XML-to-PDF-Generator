@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -135,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(SuccessResponse response) {
                                 super.onSuccess(response);
+                                Toast.makeText(MainActivity.this,"Generation is done",Toast.LENGTH_LONG).show();
                             }
                         });
             }
@@ -314,7 +316,6 @@ public class MainActivity extends AppCompatActivity {
                         .fromViewSource()
                         .fromView(content, content, content)
                         .setFileName("Demo-Barcode")
-                        .setFolderNameOrPath("MyFolder/MyDemoBarcode/")
                         .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
                         .build(new PdfGeneratorListener() {
                             @Override

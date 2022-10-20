@@ -58,41 +58,6 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             tools:ignore="HardcodedText" />
-
-        <Button
-            android:id="@+id/bt_demo_barcode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:text="Print A Demo Barcode"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            tools:ignore="HardcodedText" />
-
-        <Button
-            android:id="@+id/bt_print_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:text="Print A Demo List"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            tools:ignore="HardcodedText" />
-
-        <Button
-            android:id="@+id/bt_invoice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:text="Print A Demo Invoice"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            tools:ignore="HardcodedText" />
-
-
         <Button
             android:id="@+id/bt_horizontal_scroll_view"
             android:layout_width="wrap_content"
@@ -103,6 +68,41 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             tools:ignore="HardcodedText" />
+        <Button
+            android:id="@+id/bt_demo_barcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Print A Demo Barcode  \n(After generation, PDF will open by pdf reader app)"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/bt_print_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Print A Demo List \n( (After generation, PDF will open by pdf reader app)"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/bt_invoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Print A Demo Invoice \n (After generation, PDF will open by pdf reader app)"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
+
+
+
 
         <Button
             android:id="@+id/bt_print_landscape"

@@ -295,6 +295,7 @@ public class PdfGenerator {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, path);
             }
+            intent.putExtra(Intent.EXTRA_STREAM, path);
             intent.setDataAndType(path, "application/pdf");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
