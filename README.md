@@ -19,7 +19,7 @@
  <p align="center">Run the <a href="https://github.com/Gkemon/Android-XML-to-PDF-Generator/tree/master/sample">sample app</a> and see the gif or <a href="https://youtu.be/zD9krZedi3M">youtube video</a> below for getting more clearance.</p>
 
 <p align="center">
-<img src="https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/master/demo-by-ezgif.com-gif-maker.gif" alt="Demo" height="500" width="300" /> 
+<img src="https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/master/demo-xml-to-pdf.gif" alt="Demo" height="500" width="300" /> 
 </p>
 
 * **Simple**: Extremely simple to use. For using <b>Step Builder Design Patten</b> undernath,here IDE greatly helps developers to complete the steps for creating a PDF from XMLs.
