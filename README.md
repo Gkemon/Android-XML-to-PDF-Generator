@@ -115,6 +115,9 @@ text view in the XML and you want to populate it with a data then try the [appro
 			 * FolderA creates first.Then FolderB inside FolderB and also FolderC inside the FolderB and finally
 			 * the pdf file named "Test-PDF.pdf" will be store inside the FolderB. */
                         .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.SHARE)
+			/*If you want to save your pdf in shared storage (where other apps can also see your pdf even after the app is uninstall).
+			 * You need to pass an xmt to pdf lifecycle observer by the following method. To get complete overview please see the MainActivity of 'sample' folder */
+			.savePDFSharedStorage(xmlToPDFLifecycleObserver)
 			/* It true then the generated pdf will be shown after generated. */
                         .build(new PdfGeneratorListener() {
                             @Override
