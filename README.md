@@ -16,7 +16,7 @@
   <b>Automatically generate PDF file from XML file or Java's View object in Android</b></br>
   <p align="center"> Make PDF from Android layout resources (e.g - R.layout.myLayout,R.id.viewID), Java's view ids or directly views objects <p>
 </p>
- <p align="center">Run the <a href="https://github.com/Gkemon/Android-XML-to-PDF-Generator/tree/master/sample">sample app</a> and see the gif below for getting more clearance.</p>
+ <p align="center">Run the <a href="https://github.com/Gkemon/Android-XML-to-PDF-Generator/tree/master/sample">sample app</a> and see the gif or <a href="https://youtu.be/zD9krZedi3M">youtube video</a> below for getting more clearance.</p>
 
 <p align="center">
 <img src="https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/master/demo-by-ezgif.com-gif-maker.gif" alt="Demo" height="500" width="300" /> 
