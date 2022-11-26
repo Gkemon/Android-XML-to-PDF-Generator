@@ -8,9 +8,8 @@
 	</p>
 	 <p align="center">
 	<a href="https://android-arsenal.com/details/1/8165"><img alt="Maintained" src="https://img.shields.io/badge/Android%20Arsenal-Android--XML--to--PDF--Generator-green.svg?style=flat" height="20"/></a>
+	<a href="https://jitpack.io/#Gkemon/Android-XML-to-PDF-Generator"><img alt="version - 2.6.8" src="https://jitpack.io/v/Gkemon/Android-XML-to-PDF-Generator.svg"/></a>
 	</p>
-
-</p>
 
 <p align="center">
   <b>Automatically generate PDF file from XML file or Java's View object in Android</b></br>
