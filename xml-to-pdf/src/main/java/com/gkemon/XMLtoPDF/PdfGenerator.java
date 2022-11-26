@@ -536,12 +536,18 @@ public class PdfGenerator {
         @Override
         public void build(PdfGeneratorListener pdfGeneratorListener) {
             this.pdfGeneratorListener = pdfGeneratorListener;
-            if (hasAllPermission(context)) {
+            if (hasAllPermission(context) || (xmlToPDFLifecycleObserver != null && android.os.Build.VERSION.SDK_INT > 32)) {
                 print();
             } else {
-                postLog("WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE Permission is not given." +
-                        " Permission taking popup (using https://github.com/Karumi/Dexter) is going " +
-                        "to be shown");
+                if(android.os.Build.VERSION.SDK_INT > 32) {
+                    postFailure("Your current sdk is greater then 32, so you need to set ''xmlToPDFLifecycleObserver'' ." +
+                            "To see example please check this code - https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/master/sample/src/main/java/com/emon/exampleXMLtoPDF/MainActivity.java" +
+                            ", line-67.");
+                }else {
+                    postLog("WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE Permission is not given." +
+                            " Permission taking popup (using https://github.com/Karumi/Dexter) is going " +
+                            "to be shown");
+                }
                 Dexter.withContext(context)
                         .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                 Manifest.permission.READ_EXTERNAL_STORAGE)
