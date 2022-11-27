@@ -57,7 +57,7 @@ public class PdfGenerator {
     public final static int a4WidthInPX = 2480;
     public final static int a5HeightInPX = 1748;
     public final static int a5WidthInPX = 2480;
-
+    public final static String errorMessageOfXMLtoPDFLifecycleObserver = "uri is null from ''xmlToPDFLifecycleObserver'' ";
     public static int a4HeightInPostScript = (int) (a4HeightInPX * postScriptThreshold);
     public static int a4WidthInPostScript = (int) (a4WidthInPX * postScriptThreshold);
 
@@ -419,7 +419,11 @@ public class PdfGenerator {
                     //When user want to save pdf in shared storage
                     if (xmlToPDFLifecycleObserver != null) {
                         xmlToPDFLifecycleObserver.setPdfSaveListener(uri -> {
-                            writePDFOnSavedBlankPDFFile(document, uri);
+                            if (uri != null)
+                                writePDFOnSavedBlankPDFFile(document, uri);
+                            else  {
+                                postFailure(errorMessageOfXMLtoPDFLifecycleObserver);
+                            }
                         });
                         Intent intent;
                         intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -439,7 +443,7 @@ public class PdfGenerator {
 
         }
 
-        private void writePDFOnSavedBlankPDFFile(PdfDocument document, Uri uri) {
+        private void writePDFOnSavedBlankPDFFile(PdfDocument document, @NonNull Uri uri) {
             try {
                 ParcelFileDescriptor pfd = context.getContentResolver().
                         openFileDescriptor(uri, "w");
@@ -539,11 +543,11 @@ public class PdfGenerator {
             if (hasAllPermission(context) || (xmlToPDFLifecycleObserver != null && android.os.Build.VERSION.SDK_INT > 32)) {
                 print();
             } else {
-                if(android.os.Build.VERSION.SDK_INT >= 33) {
+                if (android.os.Build.VERSION.SDK_INT >= 33) {
                     postFailure("Your current sdk is equal and greater then 33, so you need to set ''xmlToPDFLifecycleObserver'' ." +
                             "To see example please check this code - https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/master/sample/src/main/java/com/emon/exampleXMLtoPDF/MainActivity.java" +
                             ", line-67.");
-                }else {
+                } else {
                     postLog("WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE Permission is not given." +
                             " Permission taking popup (using https://github.com/Karumi/Dexter) is going " +
                             "to be shown");
