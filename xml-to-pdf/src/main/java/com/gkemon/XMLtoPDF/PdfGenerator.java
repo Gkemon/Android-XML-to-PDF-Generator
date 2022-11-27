@@ -539,8 +539,8 @@ public class PdfGenerator {
             if (hasAllPermission(context) || (xmlToPDFLifecycleObserver != null && android.os.Build.VERSION.SDK_INT > 32)) {
                 print();
             } else {
-                if(android.os.Build.VERSION.SDK_INT > 32) {
-                    postFailure("Your current sdk is greater then 32, so you need to set ''xmlToPDFLifecycleObserver'' ." +
+                if(android.os.Build.VERSION.SDK_INT >= 33) {
+                    postFailure("Your current sdk is equal and greater then 33, so you need to set ''xmlToPDFLifecycleObserver'' ." +
                             "To see example please check this code - https://github.com/Gkemon/Android-XML-to-PDF-Generator/blob/master/sample/src/main/java/com/emon/exampleXMLtoPDF/MainActivity.java" +
                             ", line-67.");
                 }else {
