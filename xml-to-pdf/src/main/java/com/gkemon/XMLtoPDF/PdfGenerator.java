@@ -40,7 +40,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -421,7 +420,7 @@ public class PdfGenerator {
                         xmlToPDFLifecycleObserver.setPdfSaveListener(uri -> {
                             if (uri != null)
                                 writePDFOnSavedBlankPDFFile(document, uri);
-                            else  {
+                            else {
                                 postFailure(errorMessageOfXMLtoPDFLifecycleObserver);
                             }
                         });
@@ -444,32 +443,37 @@ public class PdfGenerator {
         }
 
         private void writePDFOnSavedBlankPDFFile(PdfDocument document, @NonNull Uri uri) {
-            try {
-                ParcelFileDescriptor pfd = context.getContentResolver().
-                        openFileDescriptor(uri, "w");
-                FileOutputStream fileOutputStream =
-                        new FileOutputStream(pfd.getFileDescriptor());
-                disposable = Completable.fromAction(() ->
-                                document.writeTo(fileOutputStream))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doFinally(() -> {
-                            document.close();
-                            fileOutputStream.close();
-                            pfd.close();
-                            disposeDisposable();
-                            postOnGenerationFinished();
-                        })
-                        .subscribe(() -> {
-                            dealAfterSavingInSharedStore(actionAfterPDFGeneration, uri);
-                            postSuccess(
-                                    document,
-                                    FileUtils.getFile(context, uri),
-                                    pageWidthInPixel,
-                                    pageHeightInPixel);
-                        }, this::postFailure);
-            } catch (IOException e) {
-                postFailure(e);
+            try (ParcelFileDescriptor pfd = context.getContentResolver().
+                    openFileDescriptor(uri, "w")) {
+                try (FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor())) {
+                    disposable = Completable.fromAction(() ->
+                                    document.writeTo(fileOutputStream))
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doFinally(() -> {
+                                document.close();
+                                fileOutputStream.close();
+                                pfd.close();
+                                disposeDisposable();
+                                postOnGenerationFinished();
+                            })
+                            .subscribe(() -> {
+                                try {
+                                    dealAfterSavingInSharedStore(actionAfterPDFGeneration, uri);
+                                    postSuccess(
+                                            document,
+                                            FileUtils.getFile(context, uri),
+                                            pageWidthInPixel,
+                                            pageHeightInPixel);
+                                } catch (Exception exception) {
+                                    postFailure(exception);
+                                }
+                            }, this::postFailure);
+                } catch (Exception exception) {
+                    postFailure(exception);
+                }
+            } catch (Exception exception) {
+                postFailure(exception);
             }
         }
 
