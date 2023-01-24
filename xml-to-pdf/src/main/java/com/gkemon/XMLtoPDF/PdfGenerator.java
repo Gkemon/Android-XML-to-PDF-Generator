@@ -443,35 +443,33 @@ public class PdfGenerator {
         }
 
         private void writePDFOnSavedBlankPDFFile(PdfDocument document, @NonNull Uri uri) {
-            try (ParcelFileDescriptor pfd = context.getContentResolver().
-                    openFileDescriptor(uri, "w")) {
-                try (FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor())) {
-                    disposable = Completable.fromAction(() ->
-                                    document.writeTo(fileOutputStream))
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doFinally(() -> {
-                                document.close();
-                                fileOutputStream.close();
-                                pfd.close();
-                                disposeDisposable();
-                                postOnGenerationFinished();
-                            })
-                            .subscribe(() -> {
-                                try {
-                                    dealAfterSavingInSharedStore(actionAfterPDFGeneration, uri);
-                                    postSuccess(
-                                            document,
-                                            FileUtils.getFile(context, uri),
-                                            pageWidthInPixel,
-                                            pageHeightInPixel);
-                                } catch (Exception exception) {
-                                    postFailure(exception);
-                                }
-                            }, this::postFailure);
-                } catch (Exception exception) {
-                    postFailure(exception);
-                }
+            try {
+                ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "w");
+                FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
+                disposable = Completable.fromAction(() ->
+                                document.writeTo(fileOutputStream))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doFinally(() -> {
+                            document.close();
+                            fileOutputStream.close();
+                            pfd.close();
+                            disposeDisposable();
+                            postOnGenerationFinished();
+                        })
+                        .subscribe(() -> {
+                            try {
+                                dealAfterSavingInSharedStore(actionAfterPDFGeneration, uri);
+                                postSuccess(
+                                        document,
+                                        FileUtils.getFile(context, uri),
+                                        pageWidthInPixel,
+                                        pageHeightInPixel);
+                            } catch (Exception exception) {
+                                postFailure(exception);
+                            }
+                        }, this::postFailure);
+
             } catch (Exception exception) {
                 postFailure(exception);
             }
