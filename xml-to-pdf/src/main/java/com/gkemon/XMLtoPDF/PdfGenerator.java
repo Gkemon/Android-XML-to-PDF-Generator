@@ -444,6 +444,10 @@ public class PdfGenerator {
 
         private void writePDFOnSavedBlankPDFFile(PdfDocument document, @NonNull Uri uri) {
             try {
+                if (context == null) {
+                    postFailure("Context is null");
+                    return;
+                }
                 ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "w");
                 FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
                 disposable = Completable.fromAction(() ->
@@ -561,10 +565,12 @@ public class PdfGenerator {
                             @Override
                             public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
 
-                                for (PermissionDeniedResponse deniedResponse : multiplePermissionsReport.getDeniedPermissionResponses()) {
+                                for (PermissionDeniedResponse deniedResponse :
+                                        multiplePermissionsReport.getDeniedPermissionResponses()) {
                                     postLog("Denied permission: " + deniedResponse.getPermissionName());
                                 }
-                                for (PermissionGrantedResponse grantedResponse : multiplePermissionsReport.getGrantedPermissionResponses()) {
+                                for (PermissionGrantedResponse grantedResponse :
+                                        multiplePermissionsReport.getGrantedPermissionResponses()) {
                                     postLog("Granted permission: " + grantedResponse.getPermissionName());
                                 }
                                 if (multiplePermissionsReport.areAllPermissionsGranted()) {
@@ -579,7 +585,9 @@ public class PdfGenerator {
 
                             }
                         })
-                        .withErrorListener(error -> postLog("Error from Dexter (https://github.com/Karumi/Dexter) : " +
+                        .withErrorListener(error -> postLog("Error from Dexter " +
+                                "(https://github.com/Karumi/Dexter) but this library is not maintaining " +
+                                "anymore so please look at this issue - https://github.com/Gkemon/Android-XML-to-PDF-Generator/issues/54#issuecomment-1550307371 " +
                                 error.toString())).check();
             }
 

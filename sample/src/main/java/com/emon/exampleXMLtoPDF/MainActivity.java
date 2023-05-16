@@ -206,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
                                 R.id.tv_print_area, R.id.tv_print_area, R.id.tv_print_area)
                         .setFileName("Demo-Text-Multi-Page")
                         .setFolderNameOrPath("MyFolder/MyDemoTextMultiPage/")
+                        .savePDFSharedStorage(xmlToPDFLifecycleObserver)
                         .actionAfterPDFGeneration(PdfGenerator.ActionAfterPDFGeneration.OPEN)
                         .build(new PdfGeneratorListener() {
                             @Override
