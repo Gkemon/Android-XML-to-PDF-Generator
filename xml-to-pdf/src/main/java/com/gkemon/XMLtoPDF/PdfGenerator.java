@@ -705,9 +705,11 @@ public class PdfGenerator {
             mGetContent = mRegistry.register("saved-pdf-from-xml", owner,
                     new ActivityResultContracts.StartActivityForResult()
                     , activityResult -> {
-                        if (activityResult.getData() != null) {
-                            pdfSaveListener.onBlankPDFCreatedInSharedStorage(activityResult.getData().getData());
-                        } else pdfSaveListener.onBlankPDFCreatedInSharedStorage(null);
+                        if (pdfSaveListener != null) {
+                            if (activityResult.getData() != null) {
+                                pdfSaveListener.onBlankPDFCreatedInSharedStorage(activityResult.getData().getData());
+                            } else pdfSaveListener.onBlankPDFCreatedInSharedStorage(null);
+                        }
                     });
         }
 
